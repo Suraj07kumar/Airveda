@@ -1,0 +1,717 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --g:#1A9E75;--gm:#0F6E56;--gl:rgba(29,158,117,0.13);
+  --dk:#0a1a15;--dkk:#061210;
+  --tx:#edf7f2;--txm:#7aaa96;
+  --cb:rgba(255,255,255,0.04);--cbr:rgba(29,158,117,0.22);
+  --good:#00c853;--mod:#ffab00;--bad:#ff6d00;
+  font-family:'Inter',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--dk);color:var(--tx);overflow-x:hidden;-webkit-text-size-adjust:100%}
+
+/* ── PARTICLE CANVAS ── */
+#pc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:56px;
+  background:rgba(10,26,21,0.95);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:0.5px solid var(--cbr);
+}
+.logo{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:700;color:#fff;text-decoration:none;flex-shrink:0}
+.ldot{width:9px;height:9px;border-radius:50%;background:var(--g);animation:gp 2s ease-in-out infinite;flex-shrink:0}
+@keyframes gp{0%,100%{box-shadow:0 0 6px var(--g)}50%{box-shadow:0 0 18px var(--g),0 0 28px rgba(29,158,117,.3)}}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{font-size:13px;color:var(--txm);text-decoration:none;transition:.2s;white-space:nowrap}
+.nav-links a:hover{color:#fff}
+.ncta{background:var(--g);color:#fff!important;padding:7px 16px;border-radius:20px;font-weight:600;font-size:13px!important;transition:.2s!important}
+.ncta:hover{background:var(--gm)!important;transform:translateY(-1px)}
+/* hamburger */
+.hbtn{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:4px;background:none;border:none}
+.hbtn span{display:block;width:22px;height:2px;background:var(--txm);border-radius:1px;transition:.3s}
+.mob-menu{display:none;flex-direction:column;gap:0;background:rgba(10,26,21,0.98);border-bottom:0.5px solid var(--cbr);z-index:190;position:relative}
+.mob-menu.open{display:flex}
+.mob-menu a{font-size:14px;color:var(--txm);text-decoration:none;padding:14px 28px;border-bottom:0.5px solid rgba(29,158,117,0.08);transition:.2s}
+.mob-menu a:hover{color:#fff;background:var(--gl)}
+.mob-menu .ncta{margin:14px 28px 18px;border-radius:20px;padding:10px;text-align:center;color:#fff!important;background:var(--g)}
+
+/* ── HERO ── */
+.hero{
+  position:relative;z-index:1;
+  /* NO min-height — let content define height, kills the gap */
+  display:flex;align-items:center;justify-content:center;
+  padding:60px 24px 48px;
+  overflow:hidden;
+}
+.hbg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 55% at 50% 35%,rgba(29,158,117,.13),transparent 68%);pointer-events:none}
+.hc{text-align:center;max-width:780px;width:100%;position:relative}
+
+.badge{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(29,158,117,.12);border:0.5px solid var(--cbr);
+  border-radius:20px;padding:5px 14px;margin-bottom:22px;
+  font-size:12px;color:var(--g);font-weight:500;
+  animation:fU .7s .1s both;
+}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--g);flex-shrink:0;animation:gp 2s infinite}
+@keyframes fU{from{transform:translateY(20px);opacity:0}}
+
+.hero h1{
+  font-size:clamp(34px,6vw,66px);font-weight:800;line-height:1.07;
+  letter-spacing:-1.5px;margin-bottom:18px;
+  animation:fU .7s .2s both;
+}
+.hero h1 span{color:var(--g)}
+.hsub{
+  font-size:clamp(14px,1.8vw,16px);color:var(--txm);line-height:1.7;
+  max-width:540px;margin:0 auto 32px;
+  animation:fU .7s .3s both;
+}
+.hact{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fU .7s .4s both}
+
+.bp{background:var(--g);color:#fff;border:none;border-radius:24px;padding:12px 26px;font-size:14px;font-weight:600;cursor:pointer;transition:.25s;text-decoration:none;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.bp:hover{background:var(--gm);transform:translateY(-2px);box-shadow:0 8px 24px rgba(29,158,117,.35)}
+.bo{background:transparent;color:#fff;border:0.5px solid rgba(255,255,255,.2);border-radius:24px;padding:12px 26px;font-size:14px;cursor:pointer;transition:.25s;text-decoration:none;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.bo:hover{border-color:var(--g);color:var(--g);transform:translateY(-2px)}
+
+/* ── DASHBOARD MOCKUP ── */
+.m3d{width:100%;max-width:560px;margin:36px auto 0;perspective:1000px;animation:fU .7s .55s both}
+.mi{transform:rotateX(10deg) rotateY(-5deg);transform-style:preserve-3d;transition:.5s ease}
+.m3d:hover .mi{transform:rotateX(2deg) rotateY(0)}
+.ms{background:#040e0b;border-radius:14px;border:1.5px solid rgba(29,158,117,.28);
+  box-shadow:0 32px 64px rgba(0,0,0,.7),0 0 32px rgba(29,158,117,.07),inset 0 1px 0 rgba(255,255,255,.04);
+  padding:16px;overflow:hidden}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sdots{display:flex;gap:5px}
+.sdot{width:8px;height:8px;border-radius:50%}
+.st{font-size:10px;color:rgba(255,255,255,.35)}
+.slv{font-size:10px;color:rgba(29,158,117,.85);display:flex;align-items:center;gap:4px}
+.slvd{width:5px;height:5px;border-radius:50%;background:#00c853;animation:gp 1.5s infinite}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.sc{background:rgba(255,255,255,.03);border:0.5px solid rgba(29,158,117,.12);border-radius:9px;padding:11px}
+.scl{font-size:9px;color:rgba(255,255,255,.32);margin-bottom:3px}
+.scv{font-size:20px;font-weight:700;line-height:1}
+.scs{font-size:9px;color:rgba(255,255,255,.28);margin-top:2px}
+.sbw{background:rgba(255,255,255,.03);border:0.5px solid rgba(29,158,117,.12);border-radius:9px;padding:11px}
+.bl{font-size:9px;color:rgba(255,255,255,.32);margin-bottom:7px}
+.br2{display:flex;align-items:center;margin-bottom:4px;gap:6px}
+.bn{font-size:9px;color:rgba(255,255,255,.42);width:34px;flex-shrink:0}
+.bt{background:rgba(255,255,255,.06);border-radius:3px;height:4px;flex:1}
+.bf{height:100%;border-radius:3px}
+.bv{font-size:9px;color:rgba(255,255,255,.5);flex-shrink:0}
+
+/* ── AQI ROW ── */
+/* KEY FIX: overflow:visible + padding-top so hover lift has room */
+.aqif{
+  position:relative;z-index:2;
+  display:flex;justify-content:center;gap:12px;flex-wrap:wrap;
+  padding:16px 24px 52px;
+  overflow:visible;/* never clip */
+}
+.aqic{
+  background:rgba(255,255,255,0.04);
+  border:0.5px solid var(--cbr);border-radius:18px;
+  padding:16px 20px;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  transition:transform .3s,border-color .3s,background .3s,box-shadow .3s;
+  cursor:default;flex:0 0 auto;
+  /* isolate so nothing clips the lift */
+  isolation:isolate;
+  position:relative;z-index:1;
+}
+.aqic:hover{
+  transform:translateY(-10px);
+  border-color:var(--g);
+  background:rgba(29,158,117,.09);
+  box-shadow:0 16px 40px rgba(0,0,0,.5);
+  z-index:10;/* bring hovered card above siblings */
+}
+.aqlc{font-size:10px;color:var(--txm);text-transform:uppercase;letter-spacing:.7px}
+.aqv{font-size:34px;font-weight:800;line-height:1}
+.aql{font-size:11px;font-weight:500}
+.aqb{width:64px;height:3px;border-radius:2px;background:rgba(255,255,255,.09);margin-top:3px;overflow:hidden}
+.aqbf{height:100%;border-radius:2px}
+.good{color:var(--good)}.mod{color:var(--mod)}.bad{color:var(--bad)}
+
+/* ── STATS ── */
+.stats{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:1px;background:var(--cbr);
+  border:0.5px solid var(--cbr);border-radius:18px;overflow:hidden;
+  margin:0 24px 56px;
+}
+.si{background:var(--dkk,#061210);padding:24px 16px;text-align:center;transition:.3s}
+.si:hover{background:rgba(29,158,117,.06)}
+.sn{font-size:clamp(22px,3vw,32px);font-weight:800;color:var(--g);line-height:1}
+.sl{font-size:12px;color:var(--txm);margin-top:5px;line-height:1.3}
+
+/* ── GENERIC SECTION ── */
+.sec{position:relative;z-index:1;padding:72px 24px}
+.sec-alt{background:rgba(0,0,0,.18)}
+.stag{font-size:11px;color:var(--g);letter-spacing:1.2px;text-transform:uppercase;font-weight:600;margin-bottom:10px}
+.sh2{font-size:clamp(28px,4vw,46px);font-weight:800;letter-spacing:-1px;line-height:1.12;margin-bottom:14px}
+.sdv{width:36px;height:2px;background:var(--g);border-radius:1px;margin:12px 0 24px}
+.ssub{font-size:15px;color:var(--txm);max-width:520px;line-height:1.65;margin-bottom:40px}
+
+/* ── PRODUCTS GRID ──
+   KEY FIXES:
+   1. padding-top on grid = room above cards for hover lift
+   2. overflow:visible on grid so lift isn't clipped
+   3. cards use isolation:isolate + z-index on hover
+   4. Minimum card width 240px — readable text
+── */
+.pg{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));
+  gap:14px;
+  padding-top:14px;
+  overflow:visible;
+}
+.pc{
+  background:rgba(255,255,255,.04);
+  border:0.5px solid var(--cbr);
+  border-radius:18px;
+  padding:24px;
+  position:relative;
+  transition:transform .32s,border-color .32s,box-shadow .32s;
+  cursor:pointer;
+  isolation:isolate;
+  z-index:1;
+  /* no overflow:hidden — lets ::before show */
+}
+.pc::after{/* subtle top glow on hover */
+  content:'';position:absolute;inset:0;border-radius:18px;
+  background:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(29,158,117,.18),transparent 70%);
+  opacity:0;transition:opacity .32s;z-index:-1;pointer-events:none;
+}
+.pc:hover{transform:translateY(-10px);border-color:var(--g);box-shadow:0 20px 48px rgba(0,0,0,.55);z-index:10}
+.pc:hover::after{opacity:1}
+.pi{
+  width:46px;height:46px;border-radius:12px;
+  background:rgba(29,158,117,.13);border:0.5px solid var(--cbr);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:14px;transition:.32s;
+}
+.pc:hover .pi{background:rgba(29,158,117,.24);transform:scale(1.08) rotate(3deg)}
+.pc h3{font-size:15px;font-weight:700;margin-bottom:7px;line-height:1.3}
+.pc p{font-size:13px;color:var(--txm);line-height:1.62}
+.ptag{display:inline-block;margin-top:12px;font-size:11px;color:var(--g);background:rgba(29,158,117,.1);padding:3px 9px;border-radius:8px}
+
+/* ── SOLUTIONS ── */
+.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));gap:14px;padding-top:14px;overflow:visible}
+.mc{
+  background:rgba(255,255,255,.04);border:0.5px solid var(--cbr);
+  border-radius:18px;padding:28px;position:relative;overflow:hidden;
+  transition:transform .3s,border-color .3s;isolation:isolate;
+}
+.mc:hover{transform:translateY(-8px);border-color:var(--g);z-index:10}
+.mn{font-size:56px;font-weight:900;color:rgba(29,158,117,.06);position:absolute;top:12px;right:16px;line-height:1;pointer-events:none}
+.mi2{font-size:28px;margin-bottom:12px}
+.mc h3{font-size:16px;font-weight:700;margin-bottom:8px}
+.mc p{font-size:13px;color:var(--txm);line-height:1.62}
+
+/* ── MAP STRIP ── */
+.mstrip{
+  background:rgba(29,158,117,.06);border:0.5px solid var(--cbr);
+  border-radius:22px;padding:36px;
+  display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap;
+}
+.mstrip-txt h2{font-size:clamp(20px,2.8vw,26px);font-weight:700;line-height:1.3;max-width:320px;margin-bottom:10px}
+.mstrip-txt p{color:var(--txm);font-size:14px;max-width:300px;margin-bottom:20px;line-height:1.6}
+.mvis{flex:1;min-width:200px;height:170px;border-radius:14px;background:rgba(0,0,0,.32);position:relative;overflow:hidden}
+.mdot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--g);box-shadow:0 0 6px var(--g);animation:mp 3s ease-in-out infinite}
+@keyframes mp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.55)}}
+.gmap-wrap{margin-top:24px;border-radius:18px;overflow:hidden;border:0.5px solid var(--cbr)}
+
+/* ── WHY ── */
+.wg{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(180px,100%),1fr));gap:12px;padding-top:12px;overflow:visible}
+.wi{
+  background:rgba(255,255,255,.04);border:0.5px solid var(--cbr);
+  border-radius:16px;padding:20px;text-align:center;
+  transition:transform .3s,border-color .3s;isolation:isolate;
+}
+.wi:hover{border-color:var(--g);transform:translateY(-6px);z-index:10}
+.wie{font-size:24px;margin-bottom:9px}
+.wi h4{font-size:13px;font-weight:700;margin-bottom:5px}
+.wi p{font-size:12px;color:var(--txm);line-height:1.55}
+
+/* ── MARQUEE ── */
+.mwrap{overflow:hidden;mask-image:linear-gradient(to right,transparent,#000 72px,#000 calc(100% - 72px),transparent)}
+.mtrack{display:flex;gap:10px;width:max-content;animation:mq 30s linear infinite}
+.mtrack:hover{animation-play-state:paused}
+@keyframes mq{to{transform:translateX(-50%)}}
+.cpill{
+  background:rgba(255,255,255,.04);border:0.5px solid var(--cbr);
+  border-radius:10px;padding:9px 16px;white-space:nowrap;
+  font-size:13px;color:var(--txm);transition:.2s;cursor:default;
+}
+.cpill:hover{border-color:var(--g);color:#fff}
+
+/* ── AWARDS ──
+   KEY FIX: overflow:visible on wrapper, padding-top on row
+── */
+.awards-outer{overflow:visible;padding-top:16px}
+.arow{
+  display:flex;gap:14px;
+  overflow-x:auto;
+  overflow-y:visible;/* never clip vertical hover */
+  padding-bottom:8px;
+  padding-top:14px;/* room for hover lift */
+  scroll-snap-type:x mandatory;
+}
+.arow::-webkit-scrollbar{height:3px}
+.arow::-webkit-scrollbar-thumb{background:var(--g);border-radius:2px}
+.ac{
+  flex:0 0 220px;
+  background:rgba(255,255,255,.04);border:0.5px solid var(--cbr);
+  border-radius:16px;padding:20px;
+  transition:transform .3s,border-color .3s,box-shadow .3s;
+  scroll-snap-align:start;
+  isolation:isolate;
+  position:relative;z-index:1;
+}
+.ac:hover{
+  border-color:var(--g);
+  transform:translateY(-10px);
+  box-shadow:0 18px 40px rgba(0,0,0,.55);
+  z-index:10;
+}
+.ay{font-size:11px;color:var(--g);font-weight:700;margin-bottom:6px}
+.ac h4{font-size:13px;font-weight:600;line-height:1.45;color:var(--tx)}
+.at2{font-size:24px;margin-bottom:8px}
+
+/* ── CTA ── */
+.ctab{
+  background:linear-gradient(135deg,rgba(29,158,117,.14),rgba(15,110,86,.07));
+  border:0.5px solid rgba(29,158,117,.28);border-radius:24px;
+  padding:clamp(36px,5vw,60px) clamp(24px,4vw,48px);
+  text-align:center;position:relative;overflow:hidden;
+}
+.ctab h2{font-size:clamp(24px,3.5vw,36px);font-weight:800;letter-spacing:-1px;margin-bottom:12px}
+.ctab p{color:var(--txm);font-size:15px;margin-bottom:26px;line-height:1.6}
+
+footer{
+  border-top:0.5px solid var(--cbr);
+  padding:32px 24px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+}
+footer p{font-size:12px;color:var(--txm)}
+.fl{display:flex;gap:18px;flex-wrap:wrap}
+.fl a{font-size:12px;color:var(--txm);text-decoration:none;transition:.2s}
+.fl a:hover{color:var(--g)}
+
+.rev{opacity:0;transform:translateY(20px);transition:.6s ease}
+.rev.vis{opacity:1;transform:translateY(0)}
+
+/* ═══════════════════════════════
+   RESPONSIVE OVERRIDES
+═══════════════════════════════ */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .ncta-desk{display:none}
+  .hbtn{display:flex}
+
+  .hero{padding:44px 20px 36px}
+  .badge{font-size:11px;padding:4px 12px}
+  .hsub{font-size:14px}
+  .m3d{margin-top:28px}
+
+  /* AQI: 2-per-row */
+  .aqif{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 20px 44px}
+  .aqif .aqic{width:100%;flex:none}
+  .aqif .aqic:last-child{grid-column:1/-1}
+  .aqv{font-size:30px}
+
+  /* Stats: 3-col */
+  .stats{grid-template-columns:repeat(3,1fr);margin:0 20px 44px}
+  .sn{font-size:26px}
+  .sl{font-size:11px}
+
+  .sec{padding:56px 20px}
+
+  /* Cards: force single column by overriding grid entirely */
+  .pg,.mg{display:flex;flex-direction:column;gap:14px}
+  .pc,.mc{width:100%;min-width:0}
+
+  /* Why: 2-col */
+  .wg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .wi{width:100%;min-width:0}
+
+  .mstrip{flex-direction:column}
+  .mvis{width:100%;min-width:unset;height:150px}
+
+  .ctab{padding:32px 20px}
+  footer{flex-direction:column;text-align:center}
+  .fl{justify-content:center}
+}
+
+@media(max-width:480px){
+  nav{padding:0 16px}
+  .hero{padding:36px 16px 28px}
+  .aqif{grid-template-columns:1fr 1fr;padding:8px 16px 36px}
+  .stats{grid-template-columns:repeat(2,1fr);margin:0 16px 36px}
+  .si:nth-child(5){grid-column:1/-1}
+  .sec{padding:48px 16px}
+  .wg{grid-template-columns:1fr}
+}
+</style>
+
+<canvas id="pc"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#"><div class="ldot"></div>airveda</a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Products</a></li>
+    <li><a href="#">Solutions</a></li>
+    <li><a href="#">Resources</a></li>
+    <li><a href="#">Map</a></li>
+    <li><a href="#" class="ncta ncta-desk">Inquire Now</a></li>
+  </ul>
+  <button class="hbtn" id="hbtn" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mob-menu">
+  <a href="#">Home</a>
+  <a href="#">Products</a>
+  <a href="#">Solutions</a>
+  <a href="#">Resources</a>
+  <a href="#">Map</a>
+  <a href="#" class="ncta">Inquire Now</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hbg"></div>
+  <div class="hc">
+    <div class="badge"><div class="bdot"></div>Trusted Air Quality Experts · 9+ Years · ISO 9001</div>
+    <h1>Breathe <span>Smarter.</span><br>Live Better.</h1>
+    <p class="hsub">Deep-tech IoT &amp; AI solutions that monitor, analyse, and act on air quality — for homes, buildings, construction sites, and smart cities.</p>
+    <div class="hact">
+      <a href="#" class="bp">Explore Products ↗</a>
+      <a href="#" class="bo">View Live AQI Map</a>
+    </div>
+    <div class="m3d">
+      <div class="mi">
+        <div class="ms">
+          <div class="sh">
+            <div class="sdots">
+              <div class="sdot" style="background:#ff5f56"></div>
+              <div class="sdot" style="background:#ffbd2e"></div>
+              <div class="sdot" style="background:#27c93f"></div>
+            </div>
+            <div class="st">Airveda Dashboard · Live</div>
+            <div class="slv"><div class="slvd"></div>LIVE</div>
+          </div>
+          <div class="sg">
+            <div class="sc"><div class="scl">PM2.5 · Office Floor 3</div><div class="scv" id="pm25v" style="color:#00c853">18</div><div class="scs">μg/m³ · Good</div></div>
+            <div class="sc"><div class="scl">CO₂ Level</div><div class="scv" id="co2v" style="color:#ffab00">842</div><div class="scs">ppm · Moderate</div></div>
+            <div class="sc"><div class="scl">Temperature</div><div class="scv" style="color:#4fc3f7">24.3°</div><div class="scs">°C · Comfortable</div></div>
+            <div class="sc"><div class="scl">Humidity</div><div class="scv" style="color:#1A9E75">62%</div><div class="scs">RH · Optimal</div></div>
+          </div>
+          <div class="sbw">
+            <div class="bl">Pollutant breakdown</div>
+            <div class="br2"><span class="bn">PM2.5</span><div class="bt"><div class="bf" style="width:22%;background:#00c853"></div></div><span class="bv">18</span></div>
+            <div class="br2"><span class="bn">PM10</span><div class="bt"><div class="bf" style="width:40%;background:#ffab00"></div></div><span class="bv">45</span></div>
+            <div class="br2"><span class="bn">VOC</span><div class="bt"><div class="bf" style="width:15%;background:#1A9E75"></div></div><span class="bv">0.3</span></div>
+            <div class="br2"><span class="bn">NO₂</span><div class="bt"><div class="bf" style="width:9%;background:#4fc3f7"></div></div><span class="bv">12</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AQI ROW -->
+<div class="aqif">
+  <div class="aqic"><div class="aqlc">Delhi NCR</div><div class="aqv bad">164</div><div class="aql bad">Unhealthy</div><div class="aqb"><div class="aqbf" style="width:66%;background:#ff6d00"></div></div></div>
+  <div class="aqic"><div class="aqlc">Mumbai</div><div class="aqv mod">87</div><div class="aql mod">Moderate</div><div class="aqb"><div class="aqbf" style="width:44%;background:#ffab00"></div></div></div>
+  <div class="aqic"><div class="aqlc">Bengaluru</div><div class="aqv good">42</div><div class="aql good">Good</div><div class="aqb"><div class="aqbf" style="width:21%;background:#00c853"></div></div></div>
+  <div class="aqic"><div class="aqlc">Pune</div><div class="aqv mod">76</div><div class="aql mod">Moderate</div><div class="aqb"><div class="aqbf" style="width:38%;background:#ffab00"></div></div></div>
+  <div class="aqic" style="cursor:pointer;border-color:rgba(29,158,117,.35);background:rgba(29,158,117,.06)">
+    <div class="aqlc">Your City</div>
+    <div style="font-size:24px;margin:5px 0">🗺</div>
+    <div style="font-size:11px;color:var(--g)">Live Map →</div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats rev">
+  <div class="si"><div class="sn">9K+</div><div class="sl">Monitoring Stations</div></div>
+  <div class="si"><div class="sn">9+</div><div class="sl">Years Experience</div></div>
+  <div class="si"><div class="sn">500+</div><div class="sl">Enterprise Clients</div></div>
+  <div class="si"><div class="sn">15+</div><div class="sl">Awards Won</div></div>
+  <div class="si"><div class="sn">ISO</div><div class="sl">9001 Certified</div></div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="sec">
+  <div class="stag rev">Products</div>
+  <h2 class="sh2 rev">Monitor Everything.<br>Everywhere.</h2>
+  <div class="sdv rev"></div>
+  <p class="ssub rev">From India's first RESET &amp; CE certified indoor monitors to AI-powered vape detectors — precision-engineered for every environment.</p>
+  <div class="pg">
+    <div class="pc rev" onclick="sendPrompt('Tell me about Airveda indoor air quality monitors')">
+      <div class="pi">🏠</div>
+      <h3>Indoor Monitor</h3>
+      <p>India's first RESET &amp; CE certified IAQ monitors measuring PM2.5, CO₂, VOCs, temperature and humidity in real time.</p>
+      <span class="ptag">RESET · CE Certified</span>
+    </div>
+    <div class="pc rev" onclick="sendPrompt('Tell me about Airveda outdoor ambient monitors')">
+      <div class="pi">🏙️</div>
+      <h3>Outdoor Monitor</h3>
+      <p>Trusted by IIT Kanpur &amp; state governments. India's most accurate ambient monitors for large-scale city deployments.</p>
+      <span class="ptag">IIT-validated</span>
+    </div>
+    <div class="pc rev" onclick="sendPrompt('What is Airveda VapeSense AI?')">
+      <div class="pi">🤖</div>
+      <h3>VapeSense AI</h3>
+      <p>India's first AI-powered vape detection system. Identifies and alerts vaping incidents in schools, offices and public spaces.</p>
+      <span class="ptag">AI-Powered · First in India</span>
+    </div>
+    <div class="pc rev" onclick="sendPrompt('Tell me about Airveda weather station')">
+      <div class="pi">🌦️</div>
+      <h3>Weather Station</h3>
+      <p>Track wind speed, direction, rainfall, temperature and humidity alongside air quality in one robust, weatherproof unit.</p>
+      <span class="ptag">Multi-parameter</span>
+    </div>
+    <div class="pc rev" onclick="sendPrompt('What does the Airveda data platform offer?')">
+      <div class="pi">📊</div>
+      <h3>Data Platform</h3>
+      <p>Best-in-class SaaS with advanced visualisation, DPCC/RESET/LEED Arc integration, TV displays and mobile access.</p>
+      <span class="ptag">Cloud Dashboard</span>
+    </div>
+    <div class="pc rev" onclick="sendPrompt('Tell me about the Airveda mobile app')">
+      <div class="pi">📱</div>
+      <h3>Mobile App</h3>
+      <p>Free iOS &amp; Android. Data from 9,000+ stations worldwide with alerts, forecasts, exposure trends and widgets.</p>
+      <span class="ptag">iOS · Android · Free</span>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTIONS -->
+<section class="sec sec-alt">
+  <div class="stag rev">Solutions</div>
+  <h2 class="sh2 rev">Built for Every <span style="color:var(--g)">Environment.</span></h2>
+  <div class="sdv rev"></div>
+  <div class="mg">
+    <div class="mc rev">
+      <div class="mn">01</div>
+      <div class="mi2">🏗️</div>
+      <h3>Clean Construction</h3>
+      <p>Approved vendor for DPCC, BMC, PMC &amp; TMC compliance. Real-time monitoring with regulatory dashboard sync and smog gun automation.</p>
+    </div>
+    <div class="mc rev">
+      <div class="mn">02</div>
+      <div class="mi2">🏢</div>
+      <h3>Smart Buildings</h3>
+      <p>End-to-end IAQ, energy &amp; environment monitoring for offices, hotels, malls and schools. IGBC &amp; WELL certification support.</p>
+    </div>
+    <div class="mc rev">
+      <div class="mn">03</div>
+      <div class="mi2">🌆</div>
+      <h3>Smart Cities</h3>
+      <p>Dense outdoor sensor networks to map local hotspots. Partnered with IIT Kanpur, IIT Delhi and state governments across India.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="sec">
+  <div class="mstrip rev">
+    <div class="mstrip-txt">
+      <div class="stag">Live Data</div>
+      <h2>Track Air Quality<br>Across India &amp; Beyond.</h2>
+      <p>Real-time AQI from 9,000+ government and Airveda stations worldwide — fires, pollutants and forecasts.</p>
+      <a href="#" class="bp">Open Live Map ↗</a>
+    </div>
+    <div class="mvis">
+      <svg width="100%" height="100%" viewBox="0 0 340 170" style="opacity:.6">
+        <defs><radialGradient id="mg2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1A9E75" stop-opacity=".18"/><stop offset="100%" stop-color="transparent"/></radialGradient></defs>
+        <rect width="340" height="170" fill="url(#mg2)"/>
+        <path d="M88,26 L168,17 L245,30 L272,72 L252,118 L216,152 L168,162 L134,150 L96,116 L76,70 Z" fill="rgba(29,158,117,.06)" stroke="rgba(29,158,117,.2)" stroke-width="1"/>
+        <line x1="0" y1="42" x2="340" y2="42" stroke="rgba(29,158,117,.07)" stroke-width=".5"/>
+        <line x1="0" y1="85" x2="340" y2="85" stroke="rgba(29,158,117,.07)" stroke-width=".5"/>
+        <line x1="0" y1="128" x2="340" y2="128" stroke="rgba(29,158,117,.07)" stroke-width=".5"/>
+        <line x1="85" y1="0" x2="85" y2="170" stroke="rgba(29,158,117,.07)" stroke-width=".5"/>
+        <line x1="170" y1="0" x2="170" y2="170" stroke="rgba(29,158,117,.07)" stroke-width=".5"/>
+        <line x1="255" y1="0" x2="255" y2="170" stroke="rgba(29,158,117,.07)" stroke-width=".5"/>
+      </svg>
+      <div class="mdot" style="top:28%;left:40%"></div>
+      <div class="mdot" style="top:60%;left:22%;animation-delay:.5s;background:#ffab00;box-shadow:0 0 6px #ffab00"></div>
+      <div class="mdot" style="top:72%;left:38%;animation-delay:1s;background:#00c853;box-shadow:0 0 6px #00c853"></div>
+      <div class="mdot" style="top:44%;left:59%;animation-delay:1.5s"></div>
+      <div class="mdot" style="top:34%;left:66%;animation-delay:2s;background:#ffab00;box-shadow:0 0 6px #ffab00"></div>
+      <div class="mdot" style="top:54%;left:74%;animation-delay:2.5s;background:#ff6d00;box-shadow:0 0 6px #ff6d00"></div>
+      <div style="position:absolute;bottom:8px;left:10px;font-size:9px;color:rgba(255,255,255,.3)">9,000+ stations · Live</div>
+    </div>
+  </div>
+  <div class="gmap-wrap rev">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3888000!2d78.9629!3d20.5937!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+      width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade" title="India Map">
+    </iframe>
+  </div>
+</section>
+
+<!-- WHY AIRVEDA -->
+<section class="sec sec-alt">
+  <div class="stag rev">Why Airveda</div>
+  <h2 class="sh2 rev">The Standard for<br>Air Intelligence.</h2>
+  <div class="sdv rev"></div>
+  <div class="wg">
+    <div class="wi rev"><div class="wie">🏅</div><h4>ISO 9001 Certified</h4><p>Certified manufacturing ensuring consistent quality at scale.</p></div>
+    <div class="wi rev"><div class="wie">🔬</div><h4>Deep-Tech Accuracy</h4><p>Advanced sensor fusion and AI calibration for industry-leading precision.</p></div>
+    <div class="wi rev"><div class="wie">⚡</div><h4>Fast Innovation</h4><p>Full in-house R&amp;D from hardware to software enabling rapid iteration.</p></div>
+    <div class="wi rev"><div class="wie">🎯</div><h4>9+ Years Experience</h4><p>First-mover advantage with battle-tested deployments across India.</p></div>
+    <div class="wi rev"><div class="wie">🤝</div><h4>End-to-End Support</h4><p>From device to dashboard to regulatory compliance — fully owned.</p></div>
+    <div class="wi rev"><div class="wie">💚</div><h4>Mission-Driven</h4><p>Solving air pollution for health, policy and civic action long-term.</p></div>
+  </div>
+</section>
+
+<!-- CLIENTS MARQUEE -->
+<section class="sec" style="padding:52px 0">
+  <div style="text-align:center;margin-bottom:24px;padding:0 24px">
+    <div class="stag" style="text-align:center">Trusted By</div>
+    <h2 class="sh2" style="font-size:clamp(22px,3vw,30px)">500+ Clients Across Every Sector</h2>
+  </div>
+  <div class="mwrap">
+    <div class="mtrack">
+      <div class="cpill">🏢 Godrej Properties</div>
+      <div class="cpill">🏛️ IIT Kanpur</div>
+      <div class="cpill">✈️ Guwahati Airport</div>
+      <div class="cpill">🏦 Canara Bank</div>
+      <div class="cpill">🎓 American Embassy School</div>
+      <div class="cpill">🌆 GMDA</div>
+      <div class="cpill">🏗️ UltraTech RMC</div>
+      <div class="cpill">🏛️ IIT Delhi</div>
+      <div class="cpill">🏠 Vinta Realty</div>
+      <div class="cpill">📍 Sunview Homes</div>
+      <div class="cpill">💼 Redbrick Offices</div>
+      <div class="cpill">🌏 ADB Sri Lanka</div>
+      <div class="cpill">🏢 Godrej Properties</div>
+      <div class="cpill">🏛️ IIT Kanpur</div>
+      <div class="cpill">✈️ Guwahati Airport</div>
+      <div class="cpill">🏦 Canara Bank</div>
+      <div class="cpill">🎓 American Embassy School</div>
+      <div class="cpill">🌆 GMDA</div>
+      <div class="cpill">🏗️ UltraTech RMC</div>
+      <div class="cpill">🏛️ IIT Delhi</div>
+      <div class="cpill">🏠 Vinta Realty</div>
+      <div class="cpill">📍 Sunview Homes</div>
+      <div class="cpill">💼 Redbrick Offices</div>
+      <div class="cpill">🌏 ADB Sri Lanka</div>
+    </div>
+  </div>
+</section>
+
+<!-- AWARDS -->
+<section class="sec sec-alt">
+  <div class="stag rev">Recognition</div>
+  <h2 class="sh2 rev">Award-Winning Innovation.</h2>
+  <div class="sdv rev"></div>
+  <div class="awards-outer">
+    <div class="arow">
+      <div class="ac"><div class="at2">🏆</div><div class="ay">2026</div><h4>Climate Redesign Award — Delhi Climate Innovation Week</h4></div>
+      <div class="ac"><div class="at2">🥇</div><div class="ay">2025</div><h4>Woman Icon of the Year Sustainability — NAREDCO-MAHI</h4></div>
+      <div class="ac"><div class="at2">⭐</div><div class="ay">2025</div><h4>Dynamic Woman Business Leader — Dun &amp; Bradstreet</h4></div>
+      <div class="ac"><div class="at2">🌟</div><div class="ay">2024</div><h4>Air Quality Monitoring System of the Year — Good Air Summit</h4></div>
+      <div class="ac"><div class="at2">🚀</div><div class="ay">2024</div><h4>Startup Trailblazer — Leap India Summit</h4></div>
+      <div class="ac"><div class="at2">💡</div><div class="ay">2024</div><h4>Top 25 Climate Innovators — Solar Decathlon India</h4></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="sec">
+  <div class="ctab rev">
+    <div class="stag" style="margin-bottom:12px">Get Started</div>
+    <h2>Ready to Breathe<br><span style="color:var(--g)">Cleaner Air?</span></h2>
+    <p>Join 500+ organisations. Talk to our team and find the right monitoring solution for your space.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="#" class="bp">Talk to an Expert ↗</a>
+      <a href="#" class="bo">Download App Free</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo"><div class="ldot"></div>airveda</div>
+  <p>© 2026 Airveda. All rights reserved · ISO 9001 · RESET &amp; CE Mark</p>
+  <div class="fl">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Contact</a>
+    <a href="#">Careers</a>
+    <a href="#">Blog</a>
+  </div>
+</footer>
+
+<script>
+/* ── PARTICLES ── */
+const cv=document.getElementById('pc');
+const cx=cv.getContext('2d');
+let W,H,pts=[];
+function rsz(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight}
+class P{
+  constructor(){this.reset()}
+  reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.3+.3;this.vx=(Math.random()-.5)*.25;this.vy=(Math.random()-.5)*.25-.06;this.a=Math.random()*.3+.05}
+  step(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset()}
+  draw(){cx.save();cx.globalAlpha=this.a;cx.fillStyle='#1A9E75';cx.beginPath();cx.arc(this.x,this.y,this.r,0,Math.PI*2);cx.fill();cx.restore()}
+}
+function init(){pts=[];for(let i=0;i<90;i++)pts.push(new P())}
+function lines(){
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
+    if(d<80){cx.save();cx.globalAlpha=(1-d/80)*.05;cx.strokeStyle='#1A9E75';cx.lineWidth=.5;cx.beginPath();cx.moveTo(pts[i].x,pts[i].y);cx.lineTo(pts[j].x,pts[j].y);cx.stroke();cx.restore()}
+  }
+}
+function loop(){cx.clearRect(0,0,W,H);pts.forEach(p=>{p.step();p.draw()});lines();requestAnimationFrame(loop)}
+rsz();init();loop();
+window.addEventListener('resize',()=>{rsz();init()});
+
+/* ── SCROLL REVEAL ── */
+const obs=new IntersectionObserver(es=>{
+  es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('vis'),i*70)})
+},{threshold:.08});
+document.querySelectorAll('.rev').forEach(el=>obs.observe(el));
+
+/* ── LIVE TICKER ── */
+const pm=[12,14,16,18,20,18,15,17,19,21,18,16];
+const co=[800,820,842,865,880,855,830,810,840,860,875,842];
+let tk=0;
+setInterval(()=>{
+  tk=(tk+1)%pm.length;
+  const pe=document.getElementById('pm25v');
+  const ce=document.getElementById('co2v');
+  if(pe){pe.textContent=pm[tk];pe.style.color=pm[tk]<20?'#00c853':pm[tk]<35?'#ffab00':'#ff6d00'}
+  if(ce){ce.textContent=co[tk];ce.style.color=co[tk]<800?'#00c853':co[tk]<1000?'#ffab00':'#ff6d00'}
+},2000);
+
+/* ── HAMBURGER ── */
+const hbtn=document.getElementById('hbtn');
+const mmenu=document.getElementById('mob-menu');
+hbtn.addEventListener('click',()=>{
+  mmenu.classList.toggle('open');
+  const spans=hbtn.querySelectorAll('span');
+  if(mmenu.classList.contains('open')){
+    spans[0].style.transform='rotate(45deg) translate(4px,4px)';
+    spans[1].style.opacity='0';
+    spans[2].style.transform='rotate(-45deg) translate(4px,-4px)';
+  }else{
+    spans[0].style.transform='';spans[1].style.opacity='';spans[2].style.transform='';
+  }
+});
+</script>
