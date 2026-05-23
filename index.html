@@ -11,16 +11,8 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
-        :root {
-            --g: #1A9E75;
-            --gm: #0F6E56;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        :root { --g: #1A9E75; --gm: #0F6E56; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Inter', system-ui, sans-serif;
@@ -28,87 +20,116 @@
             color: #0a1a15;
             overflow-x: hidden;
         }
-        
-        .hero-bg {
-            background: linear-gradient(135deg, #f8fafc 0%, #f0f9f5 100%);
+
+        /* ── Cursor glow ── */
+        #cursor-glow {
+            position: fixed;
+            width: 380px; height: 380px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(26,158,117,0.10) 0%, transparent 70%);
+            pointer-events: none;
+            transform: translate(-50%,-50%);
+            transition: transform 0.08s linear;
+            z-index: 9999;
+            mix-blend-mode: multiply;
         }
-        
+
+        /* ── Nav ── */
+        #main-nav {
+            transition: padding 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+        }
+        #main-nav.scrolled {
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            background: rgba(255,255,255,0.98);
+        }
         .nav-link {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .nav-link:hover {
-            color: var(--g);
-            transform: translateY(-1px);
-        }
-        
-        .card-hover {
-            transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-12px) scale(1.02);
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.15);
-        }
-        
-        .aqi-card {
-            transition: all 0.3s ease;
-        }
-        
-        .aqi-card:hover {
-            transform: scale(1.05);
-        }
-        
-        .section-title {
             position: relative;
+            transition: color 0.3s ease;
         }
-        
-        .section-title::after {
+        .nav-link::after {
             content: '';
             position: absolute;
-            width: 60px;
-            height: 3px;
+            bottom: -3px; left: 0;
+            width: 0; height: 2px;
             background: var(--g);
-            bottom: -8px;
-            left: 0;
             border-radius: 9999px;
+            transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
         }
-        
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            background: var(--g);
-            opacity: 0.15;
+        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover { color: var(--g); }
+
+        /* ── Hero ── */
+        .hero-bg {
+            background: linear-gradient(135deg, #f8fafc 0%, #f0f9f5 100%);
+            position: relative;
+        }
+
+
+        /* ── Cards ── */
+        .card-hover {
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1),
+                        box-shadow 0.4s cubic-bezier(0.4,0,0.2,1);
+            will-change: transform;
+        }
+        .card-hover:hover {
+            transform: translateY(-14px) scale(1.02);
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.16);
+        }
+
+        /* tilt cards */
+        .tilt-card { transform-style: preserve-3d; transition: transform 0.15s ease; }
+
+        /* ── AQI cards ── */
+        .aqi-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .aqi-card:hover {
+            transform: translateY(-8px) scale(1.04);
+            box-shadow: 0 20px 40px -8px rgba(0,0,0,0.12);
+        }
+
+        /* AQI bar fill animation */
+        .aqi-bar { width: 0; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
+
+        /* ── Buttons ── */
+        .btn-primary {
+            position: relative; overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 12px 28px rgba(5,150,105,0.35);
+        }
+        .btn-primary:active { transform: scale(0.97); }
+        .btn-primary .ripple {
+            position: absolute; border-radius: 50%;
+            background: rgba(255,255,255,0.35);
+            transform: scale(0); animation: ripple 0.55s linear;
             pointer-events: none;
         }
-        
-        .iphone-frame {
-            border: 12px solid #111;
-            border-radius: 48px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
-        }
-        
-        .carousel-slide {
-            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+        @keyframes ripple {
+            to { transform: scale(4); opacity: 0; }
         }
 
-        /* Framer Motion initial hidden states */
-        .fm-hidden { opacity: 0; }
-        .fm-hidden-up { opacity: 0; transform: translateY(40px); }
+        /* ── Scroll progress bar ── */
+        #scroll-bar {
+            position: fixed; top: 0; left: 0;
+            height: 3px; width: 0%;
+            background: linear-gradient(90deg, #059669, #34d399);
+            z-index: 9998;
+            transition: width 0.1s linear;
+            border-radius: 0 9999px 9999px 0;
+        }
+
+        /* ── Section reveal ── */
+        .fm-hidden     { opacity: 0; }
+        .fm-hidden-up  { opacity: 0; transform: translateY(44px); }
         .fm-hidden-right { opacity: 0; transform: translateX(60px); }
         .fm-hidden-scale { opacity: 0; transform: scale(0.85); }
+        .fm-hidden-left  { opacity: 0; transform: translateX(-60px); }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-        .float-anim { animation: float 6s ease-in-out infinite; }
-        .float-anim-slow { animation: float 9s ease-in-out infinite; }
-
+        /* ── Shimmer text ── */
         @keyframes shimmer {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
+            0%   { background-position: -200% center; }
+            100% { background-position:  200% center; }
         }
         .shimmer-text {
             background: linear-gradient(90deg, #059669, #34d399, #059669);
@@ -117,9 +138,91 @@
             -webkit-text-fill-color: transparent;
             animation: shimmer 3s linear infinite;
         }
+
+        /* ── Floating hero card ── */
+        @keyframes floatCard {
+            0%,100% { transform: translateY(0px); }
+            50%      { transform: translateY(-10px); }
+        }
+        .float-card { animation: floatCard 5s ease-in-out infinite; }
+
+        /* ── Solutions tabs ── */
+        .sol-tab {
+            display: flex; align-items: center; gap: 14px;
+            padding: 16px 20px; border-radius: 16px;
+            cursor: pointer; border: none; background: transparent;
+            text-align: left; width: 100%;
+            transition: background 0.25s ease, transform 0.2s ease;
+        }
+        .sol-tab:hover { background: #f0fdf4; transform: translateX(4px); }
+        .sol-tab.active {
+            background: #fff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .sol-tab .tab-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; flex-shrink: 0;
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .sol-tab.active .tab-icon { transform: scale(1.15); }
+        .sol-tab .tab-label { font-weight: 600; font-size: 0.95rem; }
+        .sol-tab .tab-sub   { font-size: 0.75rem; color: #6b7280; margin-top: 2px; }
+        .sol-tab .tab-arrow {
+            margin-left: auto; color: #d1d5db;
+            transition: color 0.25s, transform 0.25s;
+        }
+        .sol-tab.active .tab-arrow { color: #059669; transform: translateX(3px); }
+
+        /* panel fade-slide */
+        .sol-panel {
+            display: none;
+            animation: panelIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
+        }
+        .sol-panel.active { display: block; }
+        @keyframes panelIn {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* stat pills */
+        .sol-stat {
+            background: #f0fdf4; border-radius: 12px;
+            padding: 14px 18px; text-align: center;
+        }
+        .sol-stat .val { font-size: 1.5rem; font-weight: 800; color: #059669; }
+        .sol-stat .lbl { font-size: 0.7rem; color: #6b7280; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* ── CTA section glow ── */
+        .cta-glow {
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(52,211,153,0.18) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        /* ── Footer link underline ── */
+        footer a {
+            position: relative;
+            transition: color 0.25s;
+        }
+        footer a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 0; height: 1px;
+            background: #fff;
+            transition: width 0.3s ease;
+        }
+        footer a:hover::after { width: 100%; }
+        footer a:hover { color: #fff; }
     </style>
 </head>
 <body class="bg-white text-[#0a1a15]">
+    <!-- Cursor glow -->
+    <div id="cursor-glow"></div>
+    <!-- Scroll progress -->
+    <div id="scroll-bar"></div>
+
     <!-- NAV -->
     <nav id="main-nav" class="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-100 fm-hidden">
         <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
@@ -181,12 +284,12 @@
                 
                 <div id="hero-btns" class="flex flex-wrap gap-4 fm-hidden-up">
                     <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})" 
-                            class="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-semibold flex items-center gap-3 transition-all hover:scale-105">
+                            class="btn-primary px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-semibold flex items-center gap-3">
                         Explore Products
                         <span class="text-xl">→</span>
                     </button>
                     <button onclick="window.location.href='https://www.airveda.com/aqi'" 
-                            class="px-8 py-4 border-2 border-gray-300 hover:border-emerald-600 rounded-3xl font-semibold transition-all">
+                            class="px-8 py-4 border-2 border-gray-300 hover:border-emerald-600 rounded-3xl font-semibold transition-all hover:scale-105">
                         Open Live AQI Map
                     </button>
                 </div>
@@ -210,7 +313,7 @@
             <!-- Hero Visual -->
             <div id="hero-visual" class="relative fm-hidden-right">
                 <div class="absolute -inset-10 bg-gradient-to-br from-emerald-100 to-transparent rounded-[4rem] -rotate-6"></div>
-                <div class="relative bg-white p-8 rounded-3xl shadow-2xl">
+                <div class="float-card relative bg-white p-8 rounded-3xl shadow-2xl">
                     <div class="flex justify-between items-start mb-8">
                         <div>
                             <div class="text-sm text-gray-500">Delhi • Today</div>
@@ -253,11 +356,11 @@
     <section class="pt-12 md:pt-2 pb-12 md:pb-0 bg-gray-50" style="overflow: visible;" data-animate="section">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid md:grid-cols-12 gap-8 md:gap-16 items-end">
-                <div class="md:col-span-5 md:pb-24">
+                <div class="md:col-span-5 md:pb-24" id="aira-text">
                     <div class="md:sticky top-24">
-                        <span class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-semibold tracking-widest rounded-3xl fm-hidden-up" data-delay="0">NEW</span>
-                        <h2 class="text-4xl md:text-5xl font-bold mt-4 leading-tight fm-hidden-up" data-delay="100">Meet <span class="text-emerald-600">Aira</span></h2>
-                        <p class="mt-6 text-lg text-gray-600 leading-relaxed fm-hidden-up" data-delay="200">
+                        <span class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-semibold tracking-widest rounded-3xl">NEW</span>
+                        <h2 class="text-4xl md:text-5xl font-bold mt-4 leading-tight">Meet <span class="text-emerald-600">Aira</span></h2>
+                        <p class="mt-6 text-lg text-gray-600 leading-relaxed">
                             Your friendly air quality companion. Aira helps children and adults understand air quality in the most human way possible.
                         </p>
                         
@@ -287,7 +390,7 @@
                 </div>
                 
                 <!-- Smartphone Mockups -->
-                <div class="md:col-span-7 flex justify-center items-end fm-hidden-right" data-delay="200" style="position: relative; padding-bottom: 0;">
+                <div class="md:col-span-7 flex justify-center items-end" id="aira-phones" style="position: relative; padding-bottom: 0;">
                     <!-- Mobile: simple stacked view -->
                     <div class="flex md:hidden justify-center gap-6 py-8 w-full">
                         <div style="position: relative; width: 48%;">
@@ -354,28 +457,28 @@
                     <div class="text-xs text-gray-500 mb-3">DELHI</div>
                     <div class="text-6xl font-bold text-orange-500">164</div>
                     <div class="text-orange-500 font-medium mt-1">Unhealthy</div>
-                    <div class="h-2 bg-orange-400 rounded-full mt-6 w-3/4 mx-auto"></div>
+                    <div class="h-2 bg-gray-100 rounded-full mt-6 mx-auto overflow-hidden" style="width:75%"><div class="aqi-bar h-full bg-orange-400 rounded-full" data-w="75%"></div></div>
                 </div>
                 
                 <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center fm-hidden-up" data-delay="100">
                     <div class="text-xs text-gray-500 mb-3">MUMBAI</div>
                     <div class="text-6xl font-bold text-amber-500">87</div>
                     <div class="text-amber-500 font-medium mt-1">Moderate</div>
-                    <div class="h-2 bg-amber-400 rounded-full mt-6 w-1/2 mx-auto"></div>
+                    <div class="h-2 bg-gray-100 rounded-full mt-6 mx-auto overflow-hidden" style="width:75%"><div class="aqi-bar h-full bg-amber-400 rounded-full" data-w="50%"></div></div>
                 </div>
                 
                 <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center fm-hidden-up" data-delay="200">
                     <div class="text-xs text-gray-500 mb-3">BENGALURU</div>
                     <div class="text-6xl font-bold text-emerald-500">42</div>
                     <div class="text-emerald-500 font-medium mt-1">Good</div>
-                    <div class="h-2 bg-emerald-500 rounded-full mt-6 w-1/4 mx-auto"></div>
+                    <div class="h-2 bg-gray-100 rounded-full mt-6 mx-auto overflow-hidden" style="width:75%"><div class="aqi-bar h-full bg-emerald-500 rounded-full" data-w="25%"></div></div>
                 </div>
                 
                 <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center fm-hidden-up" data-delay="300">
                     <div class="text-xs text-gray-500 mb-3">PUNE</div>
                     <div class="text-6xl font-bold text-amber-500">76</div>
                     <div class="text-amber-500 font-medium mt-1">Moderate</div>
-                    <div class="h-2 bg-amber-400 rounded-full mt-6 w-2/5 mx-auto"></div>
+                    <div class="h-2 bg-gray-100 rounded-full mt-6 mx-auto overflow-hidden" style="width:75%"><div class="aqi-bar h-full bg-amber-400 rounded-full" data-w="40%"></div></div>
                 </div>
                 
                 <div class="aqi-card bg-emerald-50 border border-emerald-200 rounded-3xl p-8 text-center flex flex-col justify-center fm-hidden-up" data-delay="400">
@@ -448,48 +551,233 @@
     </section>
 
     <!-- SOLUTIONS -->
-    <section class="py-24 bg-gray-50" data-animate="section">
+    <section id="solutions-section" class="py-24 bg-gray-50">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-3xl text-sm font-semibold fm-hidden-up" data-delay="0">SOLUTIONS</span>
-                <h2 class="text-4xl md:text-5xl font-bold mt-4 fm-hidden-up" data-delay="100">Built for every environment</h2>
+
+            <div class="text-center mb-14" id="sol-heading">
+                <span class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-3xl text-sm font-semibold">SOLUTIONS</span>
+                <h2 class="text-4xl md:text-5xl font-bold mt-4">Built for every environment</h2>
+                <p class="mt-4 text-gray-500 max-w-xl mx-auto">One platform, every use case. Pick your environment to see how Airveda fits in.</p>
             </div>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-10 rounded-3xl card-hover fm-hidden-up" data-delay="0">
-                    <div class="text-6xl mb-8">🏗️</div>
-                    <h3 class="font-semibold text-2xl">Clean Construction</h3>
-                    <p class="mt-4 text-gray-600">DPCC, BMC &amp; PMC compliance. Real-time monitoring with regulatory integration.</p>
+
+            <div class="flex flex-col lg:flex-row gap-6">
+
+                <!-- Tab list -->
+                <div class="lg:w-72 flex-shrink-0 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0" id="sol-tabs">
+
+                    <button class="sol-tab active" data-tab="0">
+                        <div class="tab-icon bg-emerald-100">🏗️</div>
+                        <div class="hidden lg:block">
+                            <div class="tab-label">Construction</div>
+                            <div class="tab-sub">Sites &amp; projects</div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right tab-arrow hidden lg:block text-xs"></i>
+                    </button>
+
+                    <button class="sol-tab" data-tab="1">
+                        <div class="tab-icon bg-blue-100">🏢</div>
+                        <div class="hidden lg:block">
+                            <div class="tab-label">Smart Buildings</div>
+                            <div class="tab-sub">Offices &amp; hotels</div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right tab-arrow hidden lg:block text-xs"></i>
+                    </button>
+
+                    <button class="sol-tab" data-tab="2">
+                        <div class="tab-icon bg-amber-100">🌆</div>
+                        <div class="hidden lg:block">
+                            <div class="tab-label">Smart Cities</div>
+                            <div class="tab-sub">Urban networks</div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right tab-arrow hidden lg:block text-xs"></i>
+                    </button>
+
+                    <button class="sol-tab" data-tab="3">
+                        <div class="tab-icon bg-purple-100">🏫</div>
+                        <div class="hidden lg:block">
+                            <div class="tab-label">Schools</div>
+                            <div class="tab-sub">Campuses &amp; classrooms</div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right tab-arrow hidden lg:block text-xs"></i>
+                    </button>
+
+                    <button class="sol-tab" data-tab="4">
+                        <div class="tab-icon bg-rose-100">🏥</div>
+                        <div class="hidden lg:block">
+                            <div class="tab-label">Healthcare</div>
+                            <div class="tab-sub">Hospitals &amp; clinics</div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right tab-arrow hidden lg:block text-xs"></i>
+                    </button>
+
                 </div>
-                <div class="bg-white p-10 rounded-3xl card-hover fm-hidden-up" data-delay="150">
-                    <div class="text-6xl mb-8">🏢</div>
-                    <h3 class="font-semibold text-2xl">Smart Buildings</h3>
-                    <p class="mt-4 text-gray-600">WELL &amp; IGBC certified solutions for offices, hotels and schools.</p>
-                </div>
-                <div class="bg-white p-10 rounded-3xl card-hover fm-hidden-up" data-delay="300">
-                    <div class="text-6xl mb-8">🌆</div>
-                    <h3 class="font-semibold text-2xl">Smart Cities</h3>
-                    <p class="mt-4 text-gray-600">Dense networks partnered with IITs and state governments.</p>
+
+                <!-- Panel area -->
+                <div class="flex-1 min-w-0">
+
+                    <!-- Panel 0: Construction -->
+                    <div class="sol-panel active" data-panel="0">
+                        <div class="bg-white rounded-3xl p-8 md:p-10 shadow-sm">
+                            <div class="flex flex-col md:flex-row gap-8 items-start">
+                                <div class="flex-1">
+                                    <div class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-1.5 rounded-full text-xs font-semibold mb-4">CONSTRUCTION</div>
+                                    <h3 class="text-3xl font-bold mb-3">Clean Construction</h3>
+                                    <p class="text-gray-600 leading-relaxed mb-6">Real-time dust and PM2.5 monitoring for construction sites. Stay compliant with DPCC, BMC &amp; PMC regulations and avoid costly shutdowns with automated alerts.</p>
+                                    <div class="flex flex-wrap gap-2 mb-8">
+                                        <span class="bg-emerald-50 text-emerald-700 text-xs px-3 py-1.5 rounded-full font-medium">DPCC Compliant</span>
+                                        <span class="bg-emerald-50 text-emerald-700 text-xs px-3 py-1.5 rounded-full font-medium">BMC Ready</span>
+                                        <span class="bg-emerald-50 text-emerald-700 text-xs px-3 py-1.5 rounded-full font-medium">PMC Approved</span>
+                                        <span class="bg-emerald-50 text-emerald-700 text-xs px-3 py-1.5 rounded-full font-medium">Auto Alerts</span>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-3">
+                                        <div class="sol-stat"><div class="val">500+</div><div class="lbl">Sites Monitored</div></div>
+                                        <div class="sol-stat"><div class="val">24/7</div><div class="lbl">Live Data</div></div>
+                                        <div class="sol-stat"><div class="val">0</div><div class="lbl">Shutdowns</div></div>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-48 flex-shrink-0 bg-gradient-to-br from-emerald-50 to-white rounded-2xl p-6 flex flex-col items-center justify-center text-center">
+                                    <div class="text-6xl mb-3">🏗️</div>
+                                    <div class="text-sm font-semibold text-emerald-700">Dust &amp; PM2.5</div>
+                                    <div class="text-xs text-gray-500 mt-1">Real-time monitoring</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 1: Smart Buildings -->
+                    <div class="sol-panel" data-panel="1">
+                        <div class="bg-white rounded-3xl p-8 md:p-10 shadow-sm">
+                            <div class="flex flex-col md:flex-row gap-8 items-start">
+                                <div class="flex-1">
+                                    <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-xs font-semibold mb-4">COMMERCIAL</div>
+                                    <h3 class="text-3xl font-bold mb-3">Smart Buildings</h3>
+                                    <p class="text-gray-600 leading-relaxed mb-6">WELL &amp; IGBC certified indoor air quality solutions for offices, hotels and schools. Boost productivity, reduce sick days and meet green building certifications.</p>
+                                    <div class="flex flex-wrap gap-2 mb-8">
+                                        <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1.5 rounded-full font-medium">WELL Certified</span>
+                                        <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1.5 rounded-full font-medium">IGBC</span>
+                                        <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1.5 rounded-full font-medium">LEED</span>
+                                        <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1.5 rounded-full font-medium">RESET</span>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-3">
+                                        <div class="sol-stat"><div class="val">300+</div><div class="lbl">Buildings</div></div>
+                                        <div class="sol-stat"><div class="val">11%</div><div class="lbl">Productivity Gain</div></div>
+                                        <div class="sol-stat"><div class="val">CO₂</div><div class="lbl">VOC &amp; PM2.5</div></div>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-48 flex-shrink-0 bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 flex flex-col items-center justify-center text-center">
+                                    <div class="text-6xl mb-3">🏢</div>
+                                    <div class="text-sm font-semibold text-blue-700">Indoor IAQ</div>
+                                    <div class="text-xs text-gray-500 mt-1">Certified solutions</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 2: Smart Cities -->
+                    <div class="sol-panel" data-panel="2">
+                        <div class="bg-white rounded-3xl p-8 md:p-10 shadow-sm">
+                            <div class="flex flex-col md:flex-row gap-8 items-start">
+                                <div class="flex-1">
+                                    <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-700 px-4 py-1.5 rounded-full text-xs font-semibold mb-4">URBAN</div>
+                                    <h3 class="text-3xl font-bold mb-3">Smart Cities</h3>
+                                    <p class="text-gray-600 leading-relaxed mb-6">Dense city-wide sensor networks validated by IIT Kanpur and deployed with state governments. Powering India's most comprehensive urban air quality intelligence platform.</p>
+                                    <div class="flex flex-wrap gap-2 mb-8">
+                                        <span class="bg-amber-50 text-amber-700 text-xs px-3 py-1.5 rounded-full font-medium">IIT Kanpur Validated</span>
+                                        <span class="bg-amber-50 text-amber-700 text-xs px-3 py-1.5 rounded-full font-medium">Govt. Trusted</span>
+                                        <span class="bg-amber-50 text-amber-700 text-xs px-3 py-1.5 rounded-full font-medium">9K+ Stations</span>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-3">
+                                        <div class="sol-stat"><div class="val">9K+</div><div class="lbl">Sensors</div></div>
+                                        <div class="sol-stat"><div class="val">50+</div><div class="lbl">Cities</div></div>
+                                        <div class="sol-stat"><div class="val">Live</div><div class="lbl">AQI Map</div></div>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-48 flex-shrink-0 bg-gradient-to-br from-amber-50 to-white rounded-2xl p-6 flex flex-col items-center justify-center text-center">
+                                    <div class="text-6xl mb-3">🌆</div>
+                                    <div class="text-sm font-semibold text-amber-700">City Networks</div>
+                                    <div class="text-xs text-gray-500 mt-1">IIT validated</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 3: Schools -->
+                    <div class="sol-panel" data-panel="3">
+                        <div class="bg-white rounded-3xl p-8 md:p-10 shadow-sm">
+                            <div class="flex flex-col md:flex-row gap-8 items-start">
+                                <div class="flex-1">
+                                    <div class="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-1.5 rounded-full text-xs font-semibold mb-4">EDUCATION</div>
+                                    <h3 class="text-3xl font-bold mb-3">Schools &amp; Campuses</h3>
+                                    <p class="text-gray-600 leading-relaxed mb-6">Protect children with real-time classroom air quality monitoring. Our Aira character makes air quality easy to understand for kids, while dashboards keep administrators informed.</p>
+                                    <div class="flex flex-wrap gap-2 mb-8">
+                                        <span class="bg-purple-50 text-purple-700 text-xs px-3 py-1.5 rounded-full font-medium">Child-friendly Aira</span>
+                                        <span class="bg-purple-50 text-purple-700 text-xs px-3 py-1.5 rounded-full font-medium">Admin Dashboard</span>
+                                        <span class="bg-purple-50 text-purple-700 text-xs px-3 py-1.5 rounded-full font-medium">Instant Alerts</span>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-3">
+                                        <div class="sol-stat"><div class="val">200+</div><div class="lbl">Schools</div></div>
+                                        <div class="sol-stat"><div class="val">Aira</div><div class="lbl">AI Companion</div></div>
+                                        <div class="sol-stat"><div class="val">Real</div><div class="lbl">-time Alerts</div></div>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-48 flex-shrink-0 bg-gradient-to-br from-purple-50 to-white rounded-2xl p-6 flex flex-col items-center justify-center text-center">
+                                    <div class="text-6xl mb-3">🏫</div>
+                                    <div class="text-sm font-semibold text-purple-700">Classroom IAQ</div>
+                                    <div class="text-xs text-gray-500 mt-1">Kid-friendly</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 4: Healthcare -->
+                    <div class="sol-panel" data-panel="4">
+                        <div class="bg-white rounded-3xl p-8 md:p-10 shadow-sm">
+                            <div class="flex flex-col md:flex-row gap-8 items-start">
+                                <div class="flex-1">
+                                    <div class="inline-flex items-center gap-2 bg-rose-100 text-rose-700 px-4 py-1.5 rounded-full text-xs font-semibold mb-4">HEALTHCARE</div>
+                                    <h3 class="text-3xl font-bold mb-3">Hospitals &amp; Clinics</h3>
+                                    <p class="text-gray-600 leading-relaxed mb-6">Maintain sterile air quality standards in critical care environments. Continuous monitoring with instant alerts ensures patient safety and regulatory compliance at all times.</p>
+                                    <div class="flex flex-wrap gap-2 mb-8">
+                                        <span class="bg-rose-50 text-rose-700 text-xs px-3 py-1.5 rounded-full font-medium">ISO 14644</span>
+                                        <span class="bg-rose-50 text-rose-700 text-xs px-3 py-1.5 rounded-full font-medium">Critical Care</span>
+                                        <span class="bg-rose-50 text-rose-700 text-xs px-3 py-1.5 rounded-full font-medium">24/7 Alerts</span>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-3">
+                                        <div class="sol-stat"><div class="val">100+</div><div class="lbl">Hospitals</div></div>
+                                        <div class="sol-stat"><div class="val">ISO</div><div class="lbl">14644 Ready</div></div>
+                                        <div class="sol-stat"><div class="val">&lt;1s</div><div class="lbl">Alert Time</div></div>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-48 flex-shrink-0 bg-gradient-to-br from-rose-50 to-white rounded-2xl p-6 flex flex-col items-center justify-center text-center">
+                                    <div class="text-6xl mb-3">🏥</div>
+                                    <div class="text-sm font-semibold text-rose-700">Sterile Air</div>
+                                    <div class="text-xs text-gray-500 mt-1">ISO compliant</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CTA -->
-    <section class="py-28 bg-gradient-to-br from-emerald-700 to-emerald-900 text-white" data-animate="section">
-        <div class="max-w-4xl mx-auto text-center px-6">
+    <section id="cta-section" class="py-28 bg-gradient-to-br from-emerald-700 to-emerald-900 text-white relative overflow-hidden" data-animate="section">
+        <div class="cta-glow"></div>
+        <div class="max-w-4xl mx-auto text-center px-6 relative">
             <h2 class="text-4xl md:text-5xl font-bold fm-hidden-scale" data-delay="0">Ready to improve air quality?</h2>
-            <p class="mt-6 text-xl opacity-90 fm-hidden-up" data-delay="150">Join hundreds of organizations already using Airveda to protect health and comply with regulations.</p>
-            <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center fm-hidden-up" data-delay="300">
+            <p class="mt-6 text-xl opacity-90">Join hundreds of organizations already using Airveda to protect health and comply with regulations.</p>
+            <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
                 <button onclick="alert('Demo inquiry form would open here')" 
-                        class="px-10 py-5 bg-white text-emerald-700 font-semibold rounded-3xl text-lg">Talk to Sales</button>
+                        class="btn-primary px-10 py-5 bg-white text-emerald-700 font-semibold rounded-3xl text-lg">Talk to Sales</button>
                 <button onclick="window.open('https://apps.apple.com/us/app/airveda/id1101687462','_blank')" 
-                        class="px-10 py-5 border border-white/50 hover:bg-white/10 font-semibold rounded-3xl text-lg">Download Free App</button>
+                        class="px-10 py-5 border border-white/50 hover:bg-white/10 font-semibold rounded-3xl text-lg transition-all hover:scale-105">Download Free App</button>
             </div>
         </div>
     </section>
 
-    <footer class="bg-gray-900 text-gray-400 py-16" data-animate="section">
+    <footer class="bg-gray-900 text-gray-400 py-16" id="main-footer">
         <div class="max-w-7xl mx-auto px-6 text-center">
             <div class="flex justify-center items-center gap-2 mb-6 fm-hidden-up" data-delay="0">
                 <img src="images-removebg-preview.png" alt="Airveda Logo" class="h-10 w-auto brightness-0 invert">
@@ -506,79 +794,203 @@
 
     <script>
         function showAllHidden() {
-            document.querySelectorAll('.fm-hidden, .fm-hidden-up, .fm-hidden-right, .fm-hidden-scale').forEach(el => {
+            document.querySelectorAll('.fm-hidden,.fm-hidden-up,.fm-hidden-right,.fm-hidden-scale,.fm-hidden-left').forEach(el => {
                 el.style.opacity = '1';
                 el.style.transform = 'none';
             });
+            ['aira-text','aira-phones','main-footer'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
+            });
         }
-
-        if (typeof Motion === 'undefined') { showAllHidden(); throw new Error('Motion not loaded'); }
+        if (typeof Motion === 'undefined') { showAllHidden(); }
 
         let animate, inView;
-        try {
-            ({ animate, inView } = Motion);
-        } catch(e) { showAllHidden(); throw e; }
+        try { ({ animate, inView } = Motion); } catch(e) { showAllHidden(); }
 
         const spring = [0.22, 1, 0.36, 1];
-
         function animEl(el, props, opts) {
+            if (!el) return;
             try { animate(el, props, { easing: spring, ...opts }); } catch(e) { showAllHidden(); }
         }
 
         try {
-            // --- Nav slide down ---
-            animEl('#main-nav', { opacity: [0, 1], transform: ['translateY(-20px)', 'translateY(0px)'] }, { duration: 0.5 });
+            // ── Cursor glow ──
+            const glow = document.getElementById('cursor-glow');
+            document.addEventListener('mousemove', e => {
+                glow.style.left = e.clientX + 'px';
+                glow.style.top  = e.clientY + 'px';
+            });
 
-            // --- Hero sequence (staggered) ---
-            [
-                ['#hero-badge',  0.2],
-                ['#hero-title',  0.35],
-                ['#hero-desc',   0.5],
-                ['#hero-btns',   0.65],
-                ['#hero-stats',  0.8],
-            ].forEach(([sel, delay]) =>
-                animEl(sel, { opacity: [0,1], transform: ['translateY(40px)','translateY(0px)'] }, { duration: 0.65, delay })
-            );
-            animEl('#hero-visual', { opacity: [0,1], transform: ['translateX(60px)','translateX(0px)'] }, { duration: 0.8, delay: 0.4 });
+            // ── Scroll progress bar ──
+            const scrollBar = document.getElementById('scroll-bar');
+            window.addEventListener('scroll', () => {
+                const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+                scrollBar.style.width = pct + '%';
+                document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 40);
+            }, { passive: true });
 
-            // --- Scroll-triggered animations ---
+            // ── Ripple on .btn-primary ──
+            document.querySelectorAll('.btn-primary').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const r = document.createElement('span');
+                    r.className = 'ripple';
+                    const size = Math.max(btn.offsetWidth, btn.offsetHeight);
+                    const rect = btn.getBoundingClientRect();
+                    r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+                    btn.appendChild(r);
+                    setTimeout(() => r.remove(), 600);
+                });
+            });
+
+            // ── Nav entrance ──
+            animEl(document.getElementById('main-nav'), { opacity:[0,1], transform:['translateY(-20px)','translateY(0px)'] }, { duration:0.5 });
+
+            // ── Hero staggered entrance ──
+            ['#hero-badge','#hero-title','#hero-desc','#hero-btns','#hero-stats'].forEach((sel, i) => {
+                animEl(document.querySelector(sel), { opacity:[0,1], transform:['translateY(40px)','translateY(0px)'] }, { duration:0.65, delay: 0.15 + i*0.15 });
+            });
+            animEl(document.getElementById('hero-visual'), { opacity:[0,1], transform:['translateX(50px)','translateX(0px)'] }, { duration:0.8, delay:0.35 });
+
+            // ── Scroll reveals for fm-hidden-* elements ──
             document.querySelectorAll('[data-animate="section"]').forEach(section => {
                 inView(section, () => {
                     section.querySelectorAll('.fm-hidden-up').forEach(el => {
-                        const delay = parseFloat(el.dataset.delay || 0) / 1000;
-                        animEl(el, { opacity: [0,1], transform: ['translateY(40px)','translateY(0px)'] }, { duration: 0.65, delay });
+                        animEl(el, { opacity:[0,1], transform:['translateY(40px)','translateY(0px)'] }, { duration:0.6, delay: parseFloat(el.dataset.delay||0)/1000 });
                     });
                     section.querySelectorAll('.fm-hidden-scale').forEach(el => {
-                        const delay = parseFloat(el.dataset.delay || 0) / 1000;
-                        animEl(el, { opacity: [0,1], transform: ['scale(0.85)','scale(1)'] }, { duration: 0.7, delay });
+                        animEl(el, { opacity:[0,1], transform:['scale(0.88)','scale(1)'] }, { duration:0.65, delay: parseFloat(el.dataset.delay||0)/1000 });
                     });
                     section.querySelectorAll('.fm-hidden-right').forEach(el => {
-                        const delay = parseFloat(el.dataset.delay || 0) / 1000;
-                        animEl(el, { opacity: [0,1], transform: ['translateX(60px)','translateX(0px)'] }, { duration: 0.75, delay });
+                        animEl(el, { opacity:[0,1], transform:['translateX(50px)','translateX(0px)'] }, { duration:0.7, delay: parseFloat(el.dataset.delay||0)/1000 });
+                    });
+                    section.querySelectorAll('.fm-hidden-left').forEach(el => {
+                        animEl(el, { opacity:[0,1], transform:['translateX(-50px)','translateX(0px)'] }, { duration:0.7, delay: parseFloat(el.dataset.delay||0)/1000 });
+                    });
+                    section.querySelectorAll('.aqi-bar').forEach(bar => {
+                        setTimeout(() => { bar.style.width = bar.dataset.w; }, 350);
                     });
                 }, { amount: 0.15 });
             });
 
-            // --- Floating hero card ---
-            const heroCard = document.querySelector('#hero-visual .relative.bg-white');
-            if (heroCard) animate(heroCard,
-                { transform: ['translateY(0px)', 'translateY(-12px)', 'translateY(0px)'] },
-                { duration: 4, repeat: Infinity, easing: 'ease-in-out' }
-            );
+            // ── 3D tilt removed ──
 
-            // --- Live AQI pulse ---
+            // ── Live AQI pulse ──
             setInterval(() => {
                 document.querySelectorAll('.text-6xl.font-bold').forEach(el => {
-                    if (Math.random() > 0.7) {
-                        let num = parseInt(el.textContent);
+                    if (Math.random() > 0.65) {
+                        const num = parseInt(el.textContent);
                         if (num) {
-                            const next = Math.max(20, num + Math.floor(Math.random() * 3) - 1);
-                            animate(el, { transform: ['scale(1)', 'scale(1.15)', 'scale(1)'] }, { duration: 0.4, easing: 'ease-in-out' });
+                            const next = Math.max(20, num + Math.floor(Math.random()*3) - 1);
+                            animate(el, { transform:['scale(1)','scale(1.15)','scale(1)'] }, { duration:0.4, easing:'ease-in-out' });
                             setTimeout(() => el.textContent = next, 200);
                         }
                     }
                 });
-            }, 4000);
+            }, 3500);
+
+            // ── Counter roll on hero stats ──
+            const statsEl = document.getElementById('hero-stats');
+            if (statsEl) {
+                inView(statsEl, () => {
+                    statsEl.querySelectorAll('.text-3xl, .text-4xl').forEach(el => {
+                        const raw = el.textContent.trim();
+                        const num = parseInt(raw);
+                        if (!num) return;
+                        const suffix = raw.replace(String(num), '');
+                        let cur = 0, step = Math.ceil(num/40);
+                        const t = setInterval(() => { cur = Math.min(cur+step, num); el.textContent = cur+suffix; if(cur>=num) clearInterval(t); }, 30);
+                    });
+                }, { amount: 0.5 });
+            }
+
+            // ── Aira section ──
+            const airaText   = document.getElementById('aira-text');
+            const airaPhones = document.getElementById('aira-phones');
+            if (airaText) {
+                airaText.style.opacity = '0';
+                airaPhones.style.opacity = '0';
+                inView(airaText, () => {
+                    animEl(airaText,   { opacity:[0,1], transform:['translateX(-40px)','translateX(0)'] }, { duration:0.7, delay:0.1 });
+                    animEl(airaPhones, { opacity:[0,1], transform:['translateY(40px)','translateY(0)'] },  { duration:0.75, delay:0.25 });
+                }, { amount: 0.2 });
+            }
+
+            // ── AQI cards staggered pop-in ──
+            const aqiGrid = document.querySelector('.grid.grid-cols-2');
+            if (aqiGrid) {
+                aqiGrid.querySelectorAll('.aqi-card').forEach(c => c.style.opacity = '0');
+                inView(aqiGrid, () => {
+                    aqiGrid.querySelectorAll('.aqi-card').forEach((card, i) => {
+                        animEl(card, { opacity:[0,1], transform:['scale(0.9) translateY(20px)','scale(1) translateY(0)'] }, { duration:0.5, delay: i*0.08 });
+                    });
+                    aqiGrid.querySelectorAll('.aqi-bar').forEach(bar => {
+                        setTimeout(() => { bar.style.width = bar.dataset.w; }, 400);
+                    });
+                }, { amount: 0.2 });
+            }
+
+            // ── Product cards stagger ──
+            const prodSection = document.getElementById('products');
+            if (prodSection) {
+                prodSection.querySelectorAll('.card-hover').forEach(c => c.style.opacity = '0');
+                inView(prodSection, () => {
+                    prodSection.querySelectorAll('.card-hover').forEach((card, i) => {
+                        animEl(card, { opacity:[0,1], transform:['translateY(40px)','translateY(0)'] }, { duration:0.6, delay: 0.1+i*0.12 });
+                    });
+                }, { amount: 0.15 });
+            }
+
+            // ── Solutions heading animation ──
+            const solHeading = document.getElementById('sol-heading');
+            if (solHeading) {
+                solHeading.style.opacity = '0';
+                inView(solHeading, () => {
+                    animEl(solHeading, { opacity:[0,1], transform:['translateY(30px)','translateY(0)'] }, { duration:0.6, delay:0.05 });
+                }, { amount: 0.3 });
+            }
+
+            // ── Solutions tabs ──
+            const tabs   = document.querySelectorAll('.sol-tab');
+            const panels = document.querySelectorAll('.sol-panel');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const idx = tab.dataset.tab;
+                    tabs.forEach(t => t.classList.remove('active'));
+                    panels.forEach(p => p.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.querySelector(`.sol-panel[data-panel="${idx}"]`).classList.add('active');
+                });
+            });
+
+            // animate solutions section in on scroll
+            const solSection = document.getElementById('solutions-section');
+            if (solSection) {
+                solSection.style.opacity = '0';
+                inView(solSection, () => {
+                    animEl(solSection, { opacity:[0,1], transform:['translateY(30px)','translateY(0)'] }, { duration:0.65, delay:0.05 });
+                }, { amount: 0.1 });
+            }
+
+            // ── CTA ──
+            const ctaSection = document.getElementById('cta-section');
+            if (ctaSection) {
+                inView(ctaSection, () => {
+                    animEl(ctaSection.querySelector('h2'), { opacity:[0,1], transform:['scale(0.9)','scale(1)'] }, { duration:0.6, delay:0.05 });
+                    animEl(ctaSection.querySelector('p'),  { opacity:[0,1], transform:['translateY(20px)','translateY(0)'] }, { duration:0.55, delay:0.2 });
+                    animEl(ctaSection.querySelector('.mt-12'), { opacity:[0,1], transform:['translateY(20px)','translateY(0)'] }, { duration:0.55, delay:0.32 });
+                }, { amount: 0.3 });
+            }
+
+            // ── Footer ──
+            const footer = document.getElementById('main-footer');
+            if (footer) {
+                footer.style.opacity = '0';
+                inView(footer, () => {
+                    animEl(footer, { opacity:[0,1], transform:['translateY(24px)','translateY(0)'] }, { duration:0.65, delay:0.05 });
+                }, { amount: 0.2 });
+            }
+
         } catch(e) { showAllHidden(); }
     </script>
 </body>
