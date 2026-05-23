@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Airveda | Breathe Smarter. Live Better.</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/motion@10.16.4/dist/motion.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -91,11 +92,36 @@
         .carousel-slide {
             transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
         }
+
+        /* Framer Motion initial hidden states */
+        .fm-hidden { opacity: 0; }
+        .fm-hidden-up { opacity: 0; transform: translateY(40px); }
+        .fm-hidden-right { opacity: 0; transform: translateX(60px); }
+        .fm-hidden-scale { opacity: 0; transform: scale(0.85); }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        .float-anim { animation: float 6s ease-in-out infinite; }
+        .float-anim-slow { animation: float 9s ease-in-out infinite; }
+
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .shimmer-text {
+            background: linear-gradient(90deg, #059669, #34d399, #059669);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
     </style>
 </head>
 <body class="bg-white text-[#0a1a15]">
     <!-- NAV -->
-    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-100">
+    <nav id="main-nav" class="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-100 fm-hidden">
         <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <img src="images-removebg-preview.png" alt="Airveda Logo" class="h-10 w-auto">
@@ -138,22 +164,22 @@
     <section class="hero-bg pt-24 md:pt-32 pb-20 relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 md:gap-16 items-center">
             <div class="space-y-6 md:space-y-8">
-                <div class="inline-flex items-center gap-2 bg-white border border-emerald-200 text-emerald-700 px-5 py-2 rounded-3xl text-sm font-medium">
+                <div id="hero-badge" class="inline-flex items-center gap-2 bg-white border border-emerald-200 text-emerald-700 px-5 py-2 rounded-3xl text-sm font-medium fm-hidden-up">
                     <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
                     Trusted by 500+ organizations
                 </div>
                 
-                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-none tracking-tighter">
-                    Breathe <span class="text-emerald-600">Smarter.</span><br>
+                <h1 id="hero-title" class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-none tracking-tighter fm-hidden-up">
+                    Breathe <span class="shimmer-text">Smarter.</span><br>
                     Live Better.
                 </h1>
                 
-                <p class="text-xl text-gray-600 max-w-md">
+                <p id="hero-desc" class="text-xl text-gray-600 max-w-md fm-hidden-up">
                     India's most trusted air quality monitoring platform. 
                     Real-time insights, AI-powered intelligence, and actionable data for healthier spaces.
                 </p>
                 
-                <div class="flex flex-wrap gap-4">
+                <div id="hero-btns" class="flex flex-wrap gap-4 fm-hidden-up">
                     <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})" 
                             class="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-semibold flex items-center gap-3 transition-all hover:scale-105">
                         Explore Products
@@ -165,7 +191,7 @@
                     </button>
                 </div>
                 
-                <div class="flex items-center gap-6 md:gap-8 pt-4 md:pt-6">
+                <div id="hero-stats" class="flex items-center gap-6 md:gap-8 pt-4 md:pt-6 fm-hidden-up">
                     <div>
                         <div class="text-3xl md:text-4xl font-bold text-emerald-600">9K+</div>
                         <div class="text-sm text-gray-500">Monitoring Stations</div>
@@ -182,7 +208,7 @@
             </div>
             
             <!-- Hero Visual -->
-            <div class="relative">
+            <div id="hero-visual" class="relative fm-hidden-right">
                 <div class="absolute -inset-10 bg-gradient-to-br from-emerald-100 to-transparent rounded-[4rem] -rotate-6"></div>
                 <div class="relative bg-white p-8 rounded-3xl shadow-2xl">
                     <div class="flex justify-between items-start mb-8">
@@ -224,14 +250,14 @@
     </section>
 
     <!-- AIRA SECTION -->
-    <section class="pt-12 md:pt-2 pb-12 md:pb-0 bg-gray-50" style="overflow: visible;">
+    <section class="pt-12 md:pt-2 pb-12 md:pb-0 bg-gray-50" style="overflow: visible;" data-animate="section">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid md:grid-cols-12 gap-8 md:gap-16 items-end">
                 <div class="md:col-span-5 md:pb-24">
                     <div class="md:sticky top-24">
-                        <span class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-semibold tracking-widest rounded-3xl">NEW</span>
-                        <h2 class="text-4xl md:text-5xl font-bold mt-4 leading-tight">Meet <span class="text-emerald-600">Aira</span></h2>
-                        <p class="mt-6 text-lg text-gray-600 leading-relaxed">
+                        <span class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-semibold tracking-widest rounded-3xl fm-hidden-up" data-delay="0">NEW</span>
+                        <h2 class="text-4xl md:text-5xl font-bold mt-4 leading-tight fm-hidden-up" data-delay="100">Meet <span class="text-emerald-600">Aira</span></h2>
+                        <p class="mt-6 text-lg text-gray-600 leading-relaxed fm-hidden-up" data-delay="200">
                             Your friendly air quality companion. Aira helps children and adults understand air quality in the most human way possible.
                         </p>
                         
@@ -261,7 +287,7 @@
                 </div>
                 
                 <!-- Smartphone Mockups -->
-                <div class="md:col-span-7 flex justify-center items-end" style="position: relative; padding-bottom: 0;">
+                <div class="md:col-span-7 flex justify-center items-end fm-hidden-right" data-delay="200" style="position: relative; padding-bottom: 0;">
                     <!-- Mobile: simple stacked view -->
                     <div class="flex md:hidden justify-center gap-6 py-8 w-full">
                         <div style="position: relative; width: 48%;">
@@ -317,42 +343,42 @@
     </section>
 
     <!-- LIVE CITIES -->
-    <section class="py-20 md:pt-32">
+    <section class="py-20 md:pt-32" data-animate="section">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold">Air Quality Across India</h2>
+                <h2 class="text-4xl font-bold fm-hidden-up" data-delay="0">Air Quality Across India</h2>
             </div>
             
             <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
-                <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center">
+                <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center fm-hidden-up" data-delay="0">
                     <div class="text-xs text-gray-500 mb-3">DELHI</div>
                     <div class="text-6xl font-bold text-orange-500">164</div>
                     <div class="text-orange-500 font-medium mt-1">Unhealthy</div>
                     <div class="h-2 bg-orange-400 rounded-full mt-6 w-3/4 mx-auto"></div>
                 </div>
                 
-                <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center">
+                <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center fm-hidden-up" data-delay="100">
                     <div class="text-xs text-gray-500 mb-3">MUMBAI</div>
                     <div class="text-6xl font-bold text-amber-500">87</div>
                     <div class="text-amber-500 font-medium mt-1">Moderate</div>
                     <div class="h-2 bg-amber-400 rounded-full mt-6 w-1/2 mx-auto"></div>
                 </div>
                 
-                <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center">
+                <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center fm-hidden-up" data-delay="200">
                     <div class="text-xs text-gray-500 mb-3">BENGALURU</div>
                     <div class="text-6xl font-bold text-emerald-500">42</div>
                     <div class="text-emerald-500 font-medium mt-1">Good</div>
                     <div class="h-2 bg-emerald-500 rounded-full mt-6 w-1/4 mx-auto"></div>
                 </div>
                 
-                <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center">
+                <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center fm-hidden-up" data-delay="300">
                     <div class="text-xs text-gray-500 mb-3">PUNE</div>
                     <div class="text-6xl font-bold text-amber-500">76</div>
                     <div class="text-amber-500 font-medium mt-1">Moderate</div>
                     <div class="h-2 bg-amber-400 rounded-full mt-6 w-2/5 mx-auto"></div>
                 </div>
                 
-                <div class="aqi-card bg-emerald-50 border border-emerald-200 rounded-3xl p-8 text-center flex flex-col justify-center">
+                <div class="aqi-card bg-emerald-50 border border-emerald-200 rounded-3xl p-8 text-center flex flex-col justify-center fm-hidden-up" data-delay="400">
                     <div class="text-emerald-600 text-5xl mb-4">🗺️</div>
                     <div class="font-semibold">Your City</div>
                     <a href="https://www.airveda.com/aqi" class="text-emerald-600 text-sm mt-4 inline-block hover:underline">Check Live →</a>
@@ -362,19 +388,19 @@
     </section>
 
     <!-- PRODUCTS -->
-    <section id="products" class="py-24 bg-white">
+    <section id="products" class="py-24 bg-white" data-animate="section">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-wrap justify-between items-end gap-4 mb-12">
                 <div>
-                    <span class="text-emerald-600 font-semibold tracking-widest text-sm">PRODUCTS</span>
-                    <h2 class="text-4xl md:text-5xl font-bold mt-2">Monitor Everything.<br>Everywhere.</h2>
+                    <span class="text-emerald-600 font-semibold tracking-widest text-sm fm-hidden-up" data-delay="0">PRODUCTS</span>
+                    <h2 class="text-4xl md:text-5xl font-bold mt-2 fm-hidden-up" data-delay="100">Monitor Everything.<br>Everywhere.</h2>
                 </div>
                 <a href="#" class="hidden md:flex items-center gap-2 text-emerald-600 font-medium">View all products <span class="text-xl">→</span></a>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Product cards with better animations -->
-                <div class="card-hover group bg-white border border-gray-100 rounded-3xl overflow-hidden">
+                <div class="card-hover group bg-white border border-gray-100 rounded-3xl overflow-hidden fm-hidden-up" data-delay="0">
                     <div class="h-56 bg-gradient-to-br from-emerald-100 to-white flex items-center justify-center text-7xl">
                         🏠
                     </div>
@@ -390,7 +416,7 @@
                     </div>
                 </div>
                 
-                <div class="card-hover group bg-white border border-gray-100 rounded-3xl overflow-hidden">
+                <div class="card-hover group bg-white border border-gray-100 rounded-3xl overflow-hidden fm-hidden-up" data-delay="150">
                     <div class="h-56 bg-gradient-to-br from-amber-100 to-white flex items-center justify-center text-7xl">
                         🏙️
                     </div>
@@ -406,7 +432,7 @@
                     </div>
                 </div>
                 
-                <div class="card-hover group bg-white border border-gray-100 rounded-3xl overflow-hidden relative">
+                <div class="card-hover group bg-white border border-gray-100 rounded-3xl overflow-hidden relative fm-hidden-up" data-delay="300">
                     <div class="absolute top-6 right-6 bg-black text-white text-xs px-3 py-1 rounded-3xl">NEW</div>
                     <div class="h-56 bg-gradient-to-br from-purple-100 to-white flex items-center justify-center text-7xl">
                         🤖
@@ -422,25 +448,25 @@
     </section>
 
     <!-- SOLUTIONS -->
-    <section class="py-24 bg-gray-50">
+    <section class="py-24 bg-gray-50" data-animate="section">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-16">
-                <span class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-3xl text-sm font-semibold">SOLUTIONS</span>
-                <h2 class="text-4xl md:text-5xl font-bold mt-4">Built for every environment</h2>
+                <span class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-3xl text-sm font-semibold fm-hidden-up" data-delay="0">SOLUTIONS</span>
+                <h2 class="text-4xl md:text-5xl font-bold mt-4 fm-hidden-up" data-delay="100">Built for every environment</h2>
             </div>
             
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-10 rounded-3xl card-hover">
+                <div class="bg-white p-10 rounded-3xl card-hover fm-hidden-up" data-delay="0">
                     <div class="text-6xl mb-8">🏗️</div>
                     <h3 class="font-semibold text-2xl">Clean Construction</h3>
                     <p class="mt-4 text-gray-600">DPCC, BMC &amp; PMC compliance. Real-time monitoring with regulatory integration.</p>
                 </div>
-                <div class="bg-white p-10 rounded-3xl card-hover">
+                <div class="bg-white p-10 rounded-3xl card-hover fm-hidden-up" data-delay="150">
                     <div class="text-6xl mb-8">🏢</div>
                     <h3 class="font-semibold text-2xl">Smart Buildings</h3>
                     <p class="mt-4 text-gray-600">WELL &amp; IGBC certified solutions for offices, hotels and schools.</p>
                 </div>
-                <div class="bg-white p-10 rounded-3xl card-hover">
+                <div class="bg-white p-10 rounded-3xl card-hover fm-hidden-up" data-delay="300">
                     <div class="text-6xl mb-8">🌆</div>
                     <h3 class="font-semibold text-2xl">Smart Cities</h3>
                     <p class="mt-4 text-gray-600">Dense networks partnered with IITs and state governments.</p>
@@ -450,11 +476,11 @@
     </section>
 
     <!-- CTA -->
-    <section class="py-28 bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+    <section class="py-28 bg-gradient-to-br from-emerald-700 to-emerald-900 text-white" data-animate="section">
         <div class="max-w-4xl mx-auto text-center px-6">
-            <h2 class="text-4xl md:text-5xl font-bold">Ready to improve air quality?</h2>
-            <p class="mt-6 text-xl opacity-90">Join hundreds of organizations already using Airveda to protect health and comply with regulations.</p>
-            <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
+            <h2 class="text-4xl md:text-5xl font-bold fm-hidden-scale" data-delay="0">Ready to improve air quality?</h2>
+            <p class="mt-6 text-xl opacity-90 fm-hidden-up" data-delay="150">Join hundreds of organizations already using Airveda to protect health and comply with regulations.</p>
+            <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center fm-hidden-up" data-delay="300">
                 <button onclick="alert('Demo inquiry form would open here')" 
                         class="px-10 py-5 bg-white text-emerald-700 font-semibold rounded-3xl text-lg">Talk to Sales</button>
                 <button onclick="window.open('https://apps.apple.com/us/app/airveda/id1101687462','_blank')" 
@@ -463,9 +489,9 @@
         </div>
     </section>
 
-    <footer class="bg-gray-900 text-gray-400 py-16">
+    <footer class="bg-gray-900 text-gray-400 py-16" data-animate="section">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <div class="flex justify-center items-center gap-2 mb-6">
+            <div class="flex justify-center items-center gap-2 mb-6 fm-hidden-up" data-delay="0">
                 <img src="images-removebg-preview.png" alt="Airveda Logo" class="h-10 w-auto brightness-0 invert">
                 <span class="text-3xl text-white font-bold tracking-tighter">airveda</span>
             </div>
@@ -479,41 +505,81 @@
     </footer>
 
     <script>
-        // Simple scroll animations
-        function animateOnScroll() {
-            const cards = document.querySelectorAll('.card-hover');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = 1;
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, { threshold: 0.1 });
-            
-            cards.forEach(card => {
-                card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-                observer.observe(card);
+        function showAllHidden() {
+            document.querySelectorAll('.fm-hidden, .fm-hidden-up, .fm-hidden-right, .fm-hidden-scale').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
             });
         }
-        
-        window.onload = function() {
-            animateOnScroll();
-            
-            // Fake live AQI update
+
+        if (typeof Motion === 'undefined') { showAllHidden(); throw new Error('Motion not loaded'); }
+
+        let animate, inView;
+        try {
+            ({ animate, inView } = Motion);
+        } catch(e) { showAllHidden(); throw e; }
+
+        const spring = [0.22, 1, 0.36, 1];
+
+        function animEl(el, props, opts) {
+            try { animate(el, props, { easing: spring, ...opts }); } catch(e) { showAllHidden(); }
+        }
+
+        try {
+            // --- Nav slide down ---
+            animEl('#main-nav', { opacity: [0, 1], transform: ['translateY(-20px)', 'translateY(0px)'] }, { duration: 0.5 });
+
+            // --- Hero sequence (staggered) ---
+            [
+                ['#hero-badge',  0.2],
+                ['#hero-title',  0.35],
+                ['#hero-desc',   0.5],
+                ['#hero-btns',   0.65],
+                ['#hero-stats',  0.8],
+            ].forEach(([sel, delay]) =>
+                animEl(sel, { opacity: [0,1], transform: ['translateY(40px)','translateY(0px)'] }, { duration: 0.65, delay })
+            );
+            animEl('#hero-visual', { opacity: [0,1], transform: ['translateX(60px)','translateX(0px)'] }, { duration: 0.8, delay: 0.4 });
+
+            // --- Scroll-triggered animations ---
+            document.querySelectorAll('[data-animate="section"]').forEach(section => {
+                inView(section, () => {
+                    section.querySelectorAll('.fm-hidden-up').forEach(el => {
+                        const delay = parseFloat(el.dataset.delay || 0) / 1000;
+                        animEl(el, { opacity: [0,1], transform: ['translateY(40px)','translateY(0px)'] }, { duration: 0.65, delay });
+                    });
+                    section.querySelectorAll('.fm-hidden-scale').forEach(el => {
+                        const delay = parseFloat(el.dataset.delay || 0) / 1000;
+                        animEl(el, { opacity: [0,1], transform: ['scale(0.85)','scale(1)'] }, { duration: 0.7, delay });
+                    });
+                    section.querySelectorAll('.fm-hidden-right').forEach(el => {
+                        const delay = parseFloat(el.dataset.delay || 0) / 1000;
+                        animEl(el, { opacity: [0,1], transform: ['translateX(60px)','translateX(0px)'] }, { duration: 0.75, delay });
+                    });
+                }, { amount: 0.15 });
+            });
+
+            // --- Floating hero card ---
+            const heroCard = document.querySelector('#hero-visual .relative.bg-white');
+            if (heroCard) animate(heroCard,
+                { transform: ['translateY(0px)', 'translateY(-12px)', 'translateY(0px)'] },
+                { duration: 4, repeat: Infinity, easing: 'ease-in-out' }
+            );
+
+            // --- Live AQI pulse ---
             setInterval(() => {
-                const aqiEls = document.querySelectorAll('.text-6xl.font-bold');
-                aqiEls.forEach(el => {
+                document.querySelectorAll('.text-6xl.font-bold').forEach(el => {
                     if (Math.random() > 0.7) {
                         let num = parseInt(el.textContent);
                         if (num) {
-                            num += Math.floor(Math.random() * 3) - 1;
-                            el.textContent = Math.max(20, num);
+                            const next = Math.max(20, num + Math.floor(Math.random() * 3) - 1);
+                            animate(el, { transform: ['scale(1)', 'scale(1.15)', 'scale(1)'] }, { duration: 0.4, easing: 'ease-in-out' });
+                            setTimeout(() => el.textContent = next, 200);
                         }
                     }
                 });
             }, 4000);
-        };
+        } catch(e) { showAllHidden(); }
     </script>
 </body>
 </html>
