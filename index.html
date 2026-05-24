@@ -5,14 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Airveda | Breathe Smarter. Live Better.</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/motion@10.16.4/dist/motion.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/motion@11.11.13/dist/motion.iife.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
-        :root { --g: #1A9E75; --gm: #0F6E56; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --g: #1A9E75;
+            --gm: #0F6E56;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
         body {
             font-family: 'Inter', system-ui, sans-serif;
@@ -20,116 +28,92 @@
             color: #0a1a15;
             overflow-x: hidden;
         }
-
-        /* ── Cursor glow ── */
-        #cursor-glow {
-            position: fixed;
-            width: 380px; height: 380px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(26,158,117,0.10) 0%, transparent 70%);
-            pointer-events: none;
-            transform: translate(-50%,-50%);
-            transition: transform 0.08s linear;
-            z-index: 9999;
-            mix-blend-mode: multiply;
-        }
-
-        /* ── Nav ── */
-        #main-nav {
-            transition: padding 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-        }
-        #main-nav.scrolled {
-            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
-            background: rgba(255,255,255,0.98);
-        }
-        .nav-link {
-            position: relative;
-            transition: color 0.3s ease;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -3px; left: 0;
-            width: 0; height: 2px;
-            background: var(--g);
-            border-radius: 9999px;
-            transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
-        }
-        .nav-link:hover::after { width: 100%; }
-        .nav-link:hover { color: var(--g); }
-
-        /* ── Hero ── */
+        
         .hero-bg {
             background: linear-gradient(135deg, #f8fafc 0%, #f0f9f5 100%);
+        }
+        
+        .nav-link {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-link:hover {
+            color: var(--g);
+            transform: translateY(-1px);
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.15);
+        }
+        
+        .aqi-card {
+            transition: all 0.3s ease;
+        }
+        
+        .aqi-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .section-title {
             position: relative;
         }
-
-
-        /* ── Cards ── */
-        .card-hover {
-            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1),
-                        box-shadow 0.4s cubic-bezier(0.4,0,0.2,1);
-            will-change: transform;
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background: var(--g);
+            bottom: -8px;
+            left: 0;
+            border-radius: 9999px;
         }
-        .card-hover:hover {
-            transform: translateY(-14px) scale(1.02);
-            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.16);
-        }
-
-        /* tilt cards */
-        .tilt-card { transform-style: preserve-3d; transition: transform 0.15s ease; }
-
-        /* ── AQI cards ── */
-        .aqi-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .aqi-card:hover {
-            transform: translateY(-8px) scale(1.04);
-            box-shadow: 0 20px 40px -8px rgba(0,0,0,0.12);
-        }
-
-        /* AQI bar fill animation */
-        .aqi-bar { width: 0; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
-
-        /* ── Buttons ── */
-        .btn-primary {
-            position: relative; overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 12px 28px rgba(5,150,105,0.35);
-        }
-        .btn-primary:active { transform: scale(0.97); }
-        .btn-primary .ripple {
-            position: absolute; border-radius: 50%;
-            background: rgba(255,255,255,0.35);
-            transform: scale(0); animation: ripple 0.55s linear;
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--g);
+            opacity: 0.15;
             pointer-events: none;
         }
-        @keyframes ripple {
-            to { transform: scale(4); opacity: 0; }
+        
+        .iphone-frame {
+            border: 12px solid #111;
+            border-radius: 48px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+        }
+        
+        .carousel-slide {
+            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
         }
 
-        /* ── Scroll progress bar ── */
-        #scroll-bar {
-            position: fixed; top: 0; left: 0;
-            height: 3px; width: 0%;
-            background: linear-gradient(90deg, #059669, #34d399);
-            z-index: 9998;
-            transition: width 0.1s linear;
-            border-radius: 0 9999px 9999px 0;
+        /* Framer Motion initial hidden states — CSS fallback ensures content is always visible */
+        .fm-hidden { opacity: 0; animation: fm-fallback 0.6s ease 0.3s forwards; }
+        .fm-hidden-up { opacity: 0; transform: translateY(40px); animation: fm-fallback-up 0.65s ease 0.3s forwards; }
+        .fm-hidden-right { opacity: 0; transform: translateX(60px); animation: fm-fallback-right 0.75s ease 0.4s forwards; }
+        .fm-hidden-scale { opacity: 0; transform: scale(0.85); animation: fm-fallback-scale 0.7s ease 0.3s forwards; }
+
+        @keyframes fm-fallback { to { opacity: 1; } }
+        @keyframes fm-fallback-up { to { opacity: 1; transform: translateY(0); } }
+        @keyframes fm-fallback-right { to { opacity: 1; transform: translateX(0); } }
+        @keyframes fm-fallback-scale { to { opacity: 1; transform: scale(1); } }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
         }
+        .float-anim { animation: float 6s ease-in-out infinite; }
+        .float-anim-slow { animation: float 9s ease-in-out infinite; }
 
-        /* ── Section reveal ── */
-        .fm-hidden     { opacity: 0; }
-        .fm-hidden-up  { opacity: 0; transform: translateY(44px); }
-        .fm-hidden-right { opacity: 0; transform: translateX(60px); }
-        .fm-hidden-scale { opacity: 0; transform: scale(0.85); }
-        .fm-hidden-left  { opacity: 0; transform: translateX(-60px); }
-
-        /* ── Shimmer text ── */
         @keyframes shimmer {
-            0%   { background-position: -200% center; }
-            100% { background-position:  200% center; }
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
         }
         .shimmer-text {
             background: linear-gradient(90deg, #059669, #34d399, #059669);
@@ -139,95 +123,244 @@
             animation: shimmer 3s linear infinite;
         }
 
-        /* ── Floating hero card ── */
-        @keyframes floatCard {
-            0%,100% { transform: translateY(0px); }
-            50%      { transform: translateY(-10px); }
-        }
-        .float-card { animation: floatCard 5s ease-in-out infinite; }
-
-        /* ── Solutions tabs ── */
-        .sol-tab {
-            display: flex; align-items: center; gap: 14px;
-            padding: 16px 20px; border-radius: 16px;
-            cursor: pointer; border: none; background: transparent;
-            text-align: left; width: 100%;
-            transition: background 0.25s ease, transform 0.2s ease;
-        }
-        .sol-tab:hover { background: #f0fdf4; transform: translateX(4px); }
-        .sol-tab.active {
-            background: #fff;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-        .sol-tab .tab-icon {
-            width: 44px; height: 44px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem; flex-shrink: 0;
-            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-        }
-        .sol-tab.active .tab-icon { transform: scale(1.15); }
-        .sol-tab .tab-label { font-weight: 600; font-size: 0.95rem; }
-        .sol-tab .tab-sub   { font-size: 0.75rem; color: #6b7280; margin-top: 2px; }
-        .sol-tab .tab-arrow {
-            margin-left: auto; color: #d1d5db;
-            transition: color 0.25s, transform 0.25s;
-        }
-        .sol-tab.active .tab-arrow { color: #059669; transform: translateX(3px); }
-
-        /* panel fade-slide */
-        .sol-panel {
-            display: none;
-            animation: panelIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
-        }
-        .sol-panel.active { display: block; }
-        @keyframes panelIn {
-            from { opacity: 0; transform: translateY(18px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        /* stat pills */
-        .sol-stat {
-            background: #f0fdf4; border-radius: 12px;
-            padding: 14px 18px; text-align: center;
-        }
-        .sol-stat .val { font-size: 1.5rem; font-weight: 800; color: #059669; }
-        .sol-stat .lbl { font-size: 0.7rem; color: #6b7280; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
-
-        /* ── CTA section glow ── */
-        .cta-glow {
-            position: absolute; inset: 0;
-            background: radial-gradient(ellipse at 50% 0%, rgba(52,211,153,0.18) 0%, transparent 65%);
+        /* ===== AIRA POPUP CHARACTER ===== */
+        #aira-popup {
+            position: fixed;
+            bottom: 0;
+            right: 32px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
             pointer-events: none;
         }
-
-        /* ── Footer link underline ── */
-        footer a {
+        #aira-bubble {
+            background: #fff;
+            border: 2px solid #d1fae5;
+            border-radius: 20px 20px 4px 20px;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #064e3b;
+            box-shadow: 0 8px 32px rgba(5,150,105,0.18);
+            margin-bottom: 8px;
+            margin-right: 16px;
+            opacity: 0;
+            transform: translateY(10px) scale(0.9);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            pointer-events: auto;
+            max-width: 220px;
+            line-height: 1.5;
             position: relative;
-            transition: color 0.25s;
         }
-        footer a::after {
+        #aira-bubble.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        #aira-bubble::after {
             content: '';
             position: absolute;
-            bottom: -2px; left: 0;
-            width: 0; height: 1px;
-            background: #fff;
-            transition: width 0.3s ease;
+            bottom: -10px;
+            right: 22px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 10px solid #d1fae5;
         }
-        footer a:hover::after { width: 100%; }
-        footer a:hover { color: #fff; }
+        #aira-close {
+            position: absolute;
+            top: 6px;
+            right: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #6b7280;
+            line-height: 1;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        #aira-char {
+            width: 100px;
+            height: 120px;
+            object-fit: contain;
+            transform: translateY(120px);
+            opacity: 0;
+            transition: transform 1s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
+            cursor: pointer;
+            pointer-events: auto;
+            filter: drop-shadow(0 -4px 12px rgba(5,150,105,0.2));
+        }
+        #aira-char.visible {
+            transform: translateY(0px);
+            opacity: 1;
+        }
+        @keyframes aira-idle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        #aira-char.idle {
+            animation: aira-idle 3s ease-in-out infinite;
+        }
+
+        /* ===== PARTICLE BACKGROUND ===== */
+        #particles-hero {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .hero-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, #10b981, transparent);
+            opacity: 0;
+            animation: particle-rise linear infinite;
+        }
+        @keyframes particle-rise {
+            0% { transform: translateY(100%) scale(0); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.1; }
+            100% { transform: translateY(-200px) scale(1.5); opacity: 0; }
+        }
+
+        /* ===== COUNTER ANIMATION ===== */
+        @keyframes count-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== WAVE DIVIDER ===== */
+        .wave-divider {
+            line-height: 0;
+            overflow: hidden;
+        }
+
+        /* ===== TYPING CURSOR ===== */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+            color: #10b981;
+            margin-left: 2px;
+        }
+
+        /* ===== SCROLL REVEAL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.in-view {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ===== GLOW PULSE on green elements ===== */
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+            50% { box-shadow: 0 0 0 12px rgba(16,185,129,0); }
+        }
+        .glow-btn {
+            animation: glow-pulse 2.5s ease-in-out infinite;
+        }
+
+        /* ===== LOGO SPIN ===== */
+        @keyframes logo-spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        @keyframes logo-spin-hover {
+            from { transform: rotate(0deg) scale(1.12); }
+            to   { transform: rotate(360deg) scale(1.12); }
+        }
+        nav img.logo-img { animation: logo-spin 8s linear infinite; transition: filter 0.3s; }
+        nav img.logo-img:hover { animation: logo-spin-hover 2s linear infinite; filter: drop-shadow(0 0 6px rgba(16,185,129,0.6)); }
+
+        /* ===== AQI BAR GROW ===== */
+        .aqi-bar {
+            width: 0 !important;
+            transition: width 1.4s cubic-bezier(0.4,0,0.2,1);
+        }
+        .aqi-bar.grown { width: var(--target-w) !important; }
+
+        /* ===== TILT CARDS ===== */
+        .tilt-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+
+        /* ===== GRADIENT BORDER ANIMATION ===== */
+        @keyframes border-spin {
+            from { --angle: 0deg; }
+            to { --angle: 360deg; }
+        }
+        @property --angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+        .aqi-card {
+            position: relative;
+        }
+        .aqi-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background: conic-gradient(from var(--angle), transparent 70%, rgba(16,185,129,0.4) 100%);
+            animation: border-spin 3s linear infinite;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .aqi-card:hover::before { opacity: 1; }
+
+        /* ===== RIPPLE ===== */
+        .ripple-btn { position: relative; overflow: hidden; }
+        .ripple-btn .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.35);
+            transform: scale(0);
+            animation: ripple-anim 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple-anim {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* ===== SCROLL PROGRESS BAR ===== */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            z-index: 10000;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
     </style>
 </head>
 <body class="bg-white text-[#0a1a15]">
-    <!-- Cursor glow -->
-    <div id="cursor-glow"></div>
-    <!-- Scroll progress -->
-    <div id="scroll-bar"></div>
+    <!-- SCROLL PROGRESS -->
+    <div id="scroll-progress"></div>
+
+    <!-- AIRA POPUP CHARACTER -->
+    <div id="aira-popup">
+        <div id="aira-bubble">
+            <button id="aira-close" title="Close">&#10005;</button>
+            <span id="aira-msg">Hii there! &#127800; I'm Aira!<br>I help you <strong>breathe smarter</strong>. Let's check your air quality together!</span>
+        </div>
+        <img id="aira-char" src="poor-new-removebg-preview.png" alt="Aira" title="Click to chat with Aira!">
+    </div>
 
     <!-- NAV -->
-    <nav id="main-nav" class="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-100 fm-hidden">
+    <nav id="main-nav" class="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <img src="images-removebg-preview.png" alt="Airveda Logo" class="h-10 w-auto">
+                <img src="images-removebg-preview.png" alt="Airveda Logo" class="h-10 w-auto logo-img">
                 <div class="text-2xl font-bold tracking-tight">airveda</div>
             </div>
             
@@ -265,6 +398,7 @@
 
     <!-- HERO -->
     <section class="hero-bg pt-24 md:pt-32 pb-20 relative overflow-hidden">
+        <div id="particles-hero"></div>
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 md:gap-16 items-center">
             <div class="space-y-6 md:space-y-8">
                 <div id="hero-badge" class="inline-flex items-center gap-2 bg-white border border-emerald-200 text-emerald-700 px-5 py-2 rounded-3xl text-sm font-medium fm-hidden-up">
@@ -284,12 +418,12 @@
                 
                 <div id="hero-btns" class="flex flex-wrap gap-4 fm-hidden-up">
                     <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})" 
-                            class="btn-primary px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-semibold flex items-center gap-3">
+                            class="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-semibold flex items-center gap-3 transition-all hover:scale-105 glow-btn ripple-btn">
                         Explore Products
                         <span class="text-xl">→</span>
                     </button>
                     <button onclick="window.location.href='https://www.airveda.com/aqi'" 
-                            class="px-8 py-4 border-2 border-gray-300 hover:border-emerald-600 rounded-3xl font-semibold transition-all hover:scale-105">
+                            class="px-8 py-4 border-2 border-gray-300 hover:border-emerald-600 rounded-3xl font-semibold transition-all">
                         Open Live AQI Map
                     </button>
                 </div>
@@ -313,7 +447,7 @@
             <!-- Hero Visual -->
             <div id="hero-visual" class="relative fm-hidden-right">
                 <div class="absolute -inset-10 bg-gradient-to-br from-emerald-100 to-transparent rounded-[4rem] -rotate-6"></div>
-                <div class="float-card relative bg-white p-8 rounded-3xl shadow-2xl">
+                <div class="relative bg-white p-8 rounded-3xl shadow-2xl">
                     <div class="flex justify-between items-start mb-8">
                         <div>
                             <div class="text-sm text-gray-500">Delhi • Today</div>
@@ -356,11 +490,11 @@
     <section class="pt-12 md:pt-2 pb-12 md:pb-0 bg-gray-50" style="overflow: visible;" data-animate="section">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid md:grid-cols-12 gap-8 md:gap-16 items-end">
-                <div class="md:col-span-5 md:pb-24" id="aira-text">
+                <div class="md:col-span-5 md:pb-24">
                     <div class="md:sticky top-24">
-                        <span class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-semibold tracking-widest rounded-3xl">NEW</span>
-                        <h2 class="text-4xl md:text-5xl font-bold mt-4 leading-tight">Meet <span class="text-emerald-600">Aira</span></h2>
-                        <p class="mt-6 text-lg text-gray-600 leading-relaxed">
+                        <span class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-semibold tracking-widest rounded-3xl fm-hidden-up" data-delay="0">NEW</span>
+                        <h2 class="text-4xl md:text-5xl font-bold mt-4 leading-tight fm-hidden-up" data-delay="100">Meet <span class="text-emerald-600">Aira</span></h2>
+                        <p class="mt-6 text-lg text-gray-600 leading-relaxed fm-hidden-up" data-delay="200">
                             Your friendly air quality companion. Aira helps children and adults understand air quality in the most human way possible.
                         </p>
                         
@@ -390,11 +524,11 @@
                 </div>
                 
                 <!-- Smartphone Mockups -->
-                <div class="md:col-span-7 flex justify-center items-end" id="aira-phones" style="position: relative; padding-bottom: 0;">
+                <div class="md:col-span-7 flex justify-center items-end fm-hidden-right" data-delay="200" style="position: relative; padding-bottom: 0;">
                     <!-- Mobile: simple stacked view -->
                     <div class="flex md:hidden justify-center gap-6 py-8 w-full">
                         <div style="position: relative; width: 48%;">
-                            <img src="latest-modern-smartphone-mockup-with-blank-transparent-screen-realistic-style-mobile-phone-mock-up-of-front-view-with-cellular-icon-date-and-notch-top-bar-png.webp"
+                            <img src="phone.webp"
                                  alt="Smartphone" style="width: 100%; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));">
                             <div style="position: absolute; top: 13%; left: 8%; right: 8%; bottom: 5%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                 <div style="color: #f97316; font-size: 9px; font-weight: 700; margin-bottom: 4px;">Unhealthy Air</div>
@@ -404,7 +538,7 @@
                             </div>
                         </div>
                         <div style="position: relative; width: 48%;">
-                            <img src="latest-modern-smartphone-mockup-with-blank-transparent-screen-realistic-style-mobile-phone-mock-up-of-front-view-with-cellular-icon-date-and-notch-top-bar-png.webp"
+                            <img src="phone.webp"
                                  alt="Smartphone" style="width: 100%; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.35));">
                             <div style="position: absolute; top: 13%; left: 8%; right: 8%; bottom: 5%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                                 <div style="color: #059669; font-size: 9px; font-weight: 700; margin-bottom: 4px;">Good Air Day</div>
@@ -417,7 +551,7 @@
                     <!-- Desktop: overlapping layout -->
                     <div class="hidden md:block" style="position: relative; width: min(520px, 100%); height: 680px; margin-bottom: 85px;">
                         <div style="position: absolute; bottom: -60px; left: 10px; width: 65%; transform: rotate(-8deg); opacity: 0.55; filter: blur(1.5px); z-index: 1;">
-                            <img src="latest-modern-smartphone-mockup-with-blank-transparent-screen-realistic-style-mobile-phone-mock-up-of-front-view-with-cellular-icon-date-and-notch-top-bar-png.webp"
+                            <img src="phone.webp"
                                  alt="Smartphone Back"
                                  style="width: 100%; filter: drop-shadow(0 40px 60px rgba(0,0,0,0.35));">
                             <div style="position: absolute; top: 13%; left: 8%; right: 8%; bottom: 5%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 12px;">
@@ -428,7 +562,7 @@
                             </div>
                         </div>
                         <div style="position: absolute; bottom: -80px; right: 0; width: 73%; z-index: 2; transform: rotate(3deg);">
-                            <img src="latest-modern-smartphone-mockup-with-blank-transparent-screen-realistic-style-mobile-phone-mock-up-of-front-view-with-cellular-icon-date-and-notch-top-bar-png.webp"
+                            <img src="phone.webp"
                                  alt="Smartphone Front"
                                  style="width: 100%; filter: drop-shadow(0 50px 80px rgba(0,0,0,0.45));">
                             <div style="position: absolute; top: 13%; left: 8%; right: 8%; bottom: 5%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 16px;">
@@ -457,28 +591,28 @@
                     <div class="text-xs text-gray-500 mb-3">DELHI</div>
                     <div class="text-6xl font-bold text-orange-500">164</div>
                     <div class="text-orange-500 font-medium mt-1">Unhealthy</div>
-                    <div class="h-2 bg-gray-100 rounded-full mt-6 mx-auto overflow-hidden" style="width:75%"><div class="aqi-bar h-full bg-orange-400 rounded-full" data-w="75%"></div></div>
+                    <div class="h-2 bg-orange-400 rounded-full mt-6 w-3/4 mx-auto aqi-bar" style="--target-w: 75%;"></div>
                 </div>
                 
                 <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center fm-hidden-up" data-delay="100">
                     <div class="text-xs text-gray-500 mb-3">MUMBAI</div>
                     <div class="text-6xl font-bold text-amber-500">87</div>
                     <div class="text-amber-500 font-medium mt-1">Moderate</div>
-                    <div class="h-2 bg-gray-100 rounded-full mt-6 mx-auto overflow-hidden" style="width:75%"><div class="aqi-bar h-full bg-amber-400 rounded-full" data-w="50%"></div></div>
+                    <div class="h-2 bg-amber-400 rounded-full mt-6 w-1/2 mx-auto aqi-bar" style="--target-w: 50%;"></div>
                 </div>
                 
                 <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center fm-hidden-up" data-delay="200">
                     <div class="text-xs text-gray-500 mb-3">BENGALURU</div>
                     <div class="text-6xl font-bold text-emerald-500">42</div>
                     <div class="text-emerald-500 font-medium mt-1">Good</div>
-                    <div class="h-2 bg-gray-100 rounded-full mt-6 mx-auto overflow-hidden" style="width:75%"><div class="aqi-bar h-full bg-emerald-500 rounded-full" data-w="25%"></div></div>
+                    <div class="h-2 bg-emerald-500 rounded-full mt-6 w-1/4 mx-auto aqi-bar" style="--target-w: 25%;"></div>
                 </div>
                 
                 <div class="aqi-card bg-white border border-gray-100 rounded-3xl p-8 text-center fm-hidden-up" data-delay="300">
                     <div class="text-xs text-gray-500 mb-3">PUNE</div>
                     <div class="text-6xl font-bold text-amber-500">76</div>
                     <div class="text-amber-500 font-medium mt-1">Moderate</div>
-                    <div class="h-2 bg-gray-100 rounded-full mt-6 mx-auto overflow-hidden" style="width:75%"><div class="aqi-bar h-full bg-amber-400 rounded-full" data-w="40%"></div></div>
+                    <div class="h-2 bg-amber-400 rounded-full mt-6 w-2/5 mx-auto aqi-bar" style="--target-w: 40%;"></div>
                 </div>
                 
                 <div class="aqi-card bg-emerald-50 border border-emerald-200 rounded-3xl p-8 text-center flex flex-col justify-center fm-hidden-up" data-delay="400">
@@ -550,234 +684,252 @@
         </div>
     </section>
 
-    <!-- SOLUTIONS -->
-    <section id="solutions-section" class="py-24 bg-gray-50">
+    <!-- SOLUTIONS CAROUSEL -->
+    <section class="py-24 bg-gray-50 overflow-hidden" data-animate="section">
         <div class="max-w-7xl mx-auto px-6">
-
-            <div class="text-center mb-14" id="sol-heading">
-                <span class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-3xl text-sm font-semibold">SOLUTIONS</span>
-                <h2 class="text-4xl md:text-5xl font-bold mt-4">Built for every environment</h2>
-                <p class="mt-4 text-gray-500 max-w-xl mx-auto">One platform, every use case. Pick your environment to see how Airveda fits in.</p>
-            </div>
-
-            <div class="flex flex-col lg:flex-row gap-6">
-
-                <!-- Tab list -->
-                <div class="lg:w-72 flex-shrink-0 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0" id="sol-tabs">
-
-                    <button class="sol-tab active" data-tab="0">
-                        <div class="tab-icon bg-emerald-100">🏗️</div>
-                        <div class="hidden lg:block">
-                            <div class="tab-label">Construction</div>
-                            <div class="tab-sub">Sites &amp; projects</div>
-                        </div>
-                        <i class="fa-solid fa-chevron-right tab-arrow hidden lg:block text-xs"></i>
-                    </button>
-
-                    <button class="sol-tab" data-tab="1">
-                        <div class="tab-icon bg-blue-100">🏢</div>
-                        <div class="hidden lg:block">
-                            <div class="tab-label">Smart Buildings</div>
-                            <div class="tab-sub">Offices &amp; hotels</div>
-                        </div>
-                        <i class="fa-solid fa-chevron-right tab-arrow hidden lg:block text-xs"></i>
-                    </button>
-
-                    <button class="sol-tab" data-tab="2">
-                        <div class="tab-icon bg-amber-100">🌆</div>
-                        <div class="hidden lg:block">
-                            <div class="tab-label">Smart Cities</div>
-                            <div class="tab-sub">Urban networks</div>
-                        </div>
-                        <i class="fa-solid fa-chevron-right tab-arrow hidden lg:block text-xs"></i>
-                    </button>
-
-                    <button class="sol-tab" data-tab="3">
-                        <div class="tab-icon bg-purple-100">🏫</div>
-                        <div class="hidden lg:block">
-                            <div class="tab-label">Schools</div>
-                            <div class="tab-sub">Campuses &amp; classrooms</div>
-                        </div>
-                        <i class="fa-solid fa-chevron-right tab-arrow hidden lg:block text-xs"></i>
-                    </button>
-
-                    <button class="sol-tab" data-tab="4">
-                        <div class="tab-icon bg-rose-100">🏥</div>
-                        <div class="hidden lg:block">
-                            <div class="tab-label">Healthcare</div>
-                            <div class="tab-sub">Hospitals &amp; clinics</div>
-                        </div>
-                        <i class="fa-solid fa-chevron-right tab-arrow hidden lg:block text-xs"></i>
-                    </button>
-
-                </div>
-
-                <!-- Panel area -->
-                <div class="flex-1 min-w-0">
-
-                    <!-- Panel 0: Construction -->
-                    <div class="sol-panel active" data-panel="0">
-                        <div class="bg-white rounded-3xl p-8 md:p-10 shadow-sm">
-                            <div class="flex flex-col md:flex-row gap-8 items-start">
-                                <div class="flex-1">
-                                    <div class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-1.5 rounded-full text-xs font-semibold mb-4">CONSTRUCTION</div>
-                                    <h3 class="text-3xl font-bold mb-3">Clean Construction</h3>
-                                    <p class="text-gray-600 leading-relaxed mb-6">Real-time dust and PM2.5 monitoring for construction sites. Stay compliant with DPCC, BMC &amp; PMC regulations and avoid costly shutdowns with automated alerts.</p>
-                                    <div class="flex flex-wrap gap-2 mb-8">
-                                        <span class="bg-emerald-50 text-emerald-700 text-xs px-3 py-1.5 rounded-full font-medium">DPCC Compliant</span>
-                                        <span class="bg-emerald-50 text-emerald-700 text-xs px-3 py-1.5 rounded-full font-medium">BMC Ready</span>
-                                        <span class="bg-emerald-50 text-emerald-700 text-xs px-3 py-1.5 rounded-full font-medium">PMC Approved</span>
-                                        <span class="bg-emerald-50 text-emerald-700 text-xs px-3 py-1.5 rounded-full font-medium">Auto Alerts</span>
-                                    </div>
-                                    <div class="grid grid-cols-3 gap-3">
-                                        <div class="sol-stat"><div class="val">500+</div><div class="lbl">Sites Monitored</div></div>
-                                        <div class="sol-stat"><div class="val">24/7</div><div class="lbl">Live Data</div></div>
-                                        <div class="sol-stat"><div class="val">0</div><div class="lbl">Shutdowns</div></div>
-                                    </div>
-                                </div>
-                                <div class="w-full md:w-48 flex-shrink-0 bg-gradient-to-br from-emerald-50 to-white rounded-2xl p-6 flex flex-col items-center justify-center text-center">
-                                    <div class="text-6xl mb-3">🏗️</div>
-                                    <div class="text-sm font-semibold text-emerald-700">Dust &amp; PM2.5</div>
-                                    <div class="text-xs text-gray-500 mt-1">Real-time monitoring</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Panel 1: Smart Buildings -->
-                    <div class="sol-panel" data-panel="1">
-                        <div class="bg-white rounded-3xl p-8 md:p-10 shadow-sm">
-                            <div class="flex flex-col md:flex-row gap-8 items-start">
-                                <div class="flex-1">
-                                    <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-xs font-semibold mb-4">COMMERCIAL</div>
-                                    <h3 class="text-3xl font-bold mb-3">Smart Buildings</h3>
-                                    <p class="text-gray-600 leading-relaxed mb-6">WELL &amp; IGBC certified indoor air quality solutions for offices, hotels and schools. Boost productivity, reduce sick days and meet green building certifications.</p>
-                                    <div class="flex flex-wrap gap-2 mb-8">
-                                        <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1.5 rounded-full font-medium">WELL Certified</span>
-                                        <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1.5 rounded-full font-medium">IGBC</span>
-                                        <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1.5 rounded-full font-medium">LEED</span>
-                                        <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1.5 rounded-full font-medium">RESET</span>
-                                    </div>
-                                    <div class="grid grid-cols-3 gap-3">
-                                        <div class="sol-stat"><div class="val">300+</div><div class="lbl">Buildings</div></div>
-                                        <div class="sol-stat"><div class="val">11%</div><div class="lbl">Productivity Gain</div></div>
-                                        <div class="sol-stat"><div class="val">CO₂</div><div class="lbl">VOC &amp; PM2.5</div></div>
-                                    </div>
-                                </div>
-                                <div class="w-full md:w-48 flex-shrink-0 bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 flex flex-col items-center justify-center text-center">
-                                    <div class="text-6xl mb-3">🏢</div>
-                                    <div class="text-sm font-semibold text-blue-700">Indoor IAQ</div>
-                                    <div class="text-xs text-gray-500 mt-1">Certified solutions</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Panel 2: Smart Cities -->
-                    <div class="sol-panel" data-panel="2">
-                        <div class="bg-white rounded-3xl p-8 md:p-10 shadow-sm">
-                            <div class="flex flex-col md:flex-row gap-8 items-start">
-                                <div class="flex-1">
-                                    <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-700 px-4 py-1.5 rounded-full text-xs font-semibold mb-4">URBAN</div>
-                                    <h3 class="text-3xl font-bold mb-3">Smart Cities</h3>
-                                    <p class="text-gray-600 leading-relaxed mb-6">Dense city-wide sensor networks validated by IIT Kanpur and deployed with state governments. Powering India's most comprehensive urban air quality intelligence platform.</p>
-                                    <div class="flex flex-wrap gap-2 mb-8">
-                                        <span class="bg-amber-50 text-amber-700 text-xs px-3 py-1.5 rounded-full font-medium">IIT Kanpur Validated</span>
-                                        <span class="bg-amber-50 text-amber-700 text-xs px-3 py-1.5 rounded-full font-medium">Govt. Trusted</span>
-                                        <span class="bg-amber-50 text-amber-700 text-xs px-3 py-1.5 rounded-full font-medium">9K+ Stations</span>
-                                    </div>
-                                    <div class="grid grid-cols-3 gap-3">
-                                        <div class="sol-stat"><div class="val">9K+</div><div class="lbl">Sensors</div></div>
-                                        <div class="sol-stat"><div class="val">50+</div><div class="lbl">Cities</div></div>
-                                        <div class="sol-stat"><div class="val">Live</div><div class="lbl">AQI Map</div></div>
-                                    </div>
-                                </div>
-                                <div class="w-full md:w-48 flex-shrink-0 bg-gradient-to-br from-amber-50 to-white rounded-2xl p-6 flex flex-col items-center justify-center text-center">
-                                    <div class="text-6xl mb-3">🌆</div>
-                                    <div class="text-sm font-semibold text-amber-700">City Networks</div>
-                                    <div class="text-xs text-gray-500 mt-1">IIT validated</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Panel 3: Schools -->
-                    <div class="sol-panel" data-panel="3">
-                        <div class="bg-white rounded-3xl p-8 md:p-10 shadow-sm">
-                            <div class="flex flex-col md:flex-row gap-8 items-start">
-                                <div class="flex-1">
-                                    <div class="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-1.5 rounded-full text-xs font-semibold mb-4">EDUCATION</div>
-                                    <h3 class="text-3xl font-bold mb-3">Schools &amp; Campuses</h3>
-                                    <p class="text-gray-600 leading-relaxed mb-6">Protect children with real-time classroom air quality monitoring. Our Aira character makes air quality easy to understand for kids, while dashboards keep administrators informed.</p>
-                                    <div class="flex flex-wrap gap-2 mb-8">
-                                        <span class="bg-purple-50 text-purple-700 text-xs px-3 py-1.5 rounded-full font-medium">Child-friendly Aira</span>
-                                        <span class="bg-purple-50 text-purple-700 text-xs px-3 py-1.5 rounded-full font-medium">Admin Dashboard</span>
-                                        <span class="bg-purple-50 text-purple-700 text-xs px-3 py-1.5 rounded-full font-medium">Instant Alerts</span>
-                                    </div>
-                                    <div class="grid grid-cols-3 gap-3">
-                                        <div class="sol-stat"><div class="val">200+</div><div class="lbl">Schools</div></div>
-                                        <div class="sol-stat"><div class="val">Aira</div><div class="lbl">AI Companion</div></div>
-                                        <div class="sol-stat"><div class="val">Real</div><div class="lbl">-time Alerts</div></div>
-                                    </div>
-                                </div>
-                                <div class="w-full md:w-48 flex-shrink-0 bg-gradient-to-br from-purple-50 to-white rounded-2xl p-6 flex flex-col items-center justify-center text-center">
-                                    <div class="text-6xl mb-3">🏫</div>
-                                    <div class="text-sm font-semibold text-purple-700">Classroom IAQ</div>
-                                    <div class="text-xs text-gray-500 mt-1">Kid-friendly</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Panel 4: Healthcare -->
-                    <div class="sol-panel" data-panel="4">
-                        <div class="bg-white rounded-3xl p-8 md:p-10 shadow-sm">
-                            <div class="flex flex-col md:flex-row gap-8 items-start">
-                                <div class="flex-1">
-                                    <div class="inline-flex items-center gap-2 bg-rose-100 text-rose-700 px-4 py-1.5 rounded-full text-xs font-semibold mb-4">HEALTHCARE</div>
-                                    <h3 class="text-3xl font-bold mb-3">Hospitals &amp; Clinics</h3>
-                                    <p class="text-gray-600 leading-relaxed mb-6">Maintain sterile air quality standards in critical care environments. Continuous monitoring with instant alerts ensures patient safety and regulatory compliance at all times.</p>
-                                    <div class="flex flex-wrap gap-2 mb-8">
-                                        <span class="bg-rose-50 text-rose-700 text-xs px-3 py-1.5 rounded-full font-medium">ISO 14644</span>
-                                        <span class="bg-rose-50 text-rose-700 text-xs px-3 py-1.5 rounded-full font-medium">Critical Care</span>
-                                        <span class="bg-rose-50 text-rose-700 text-xs px-3 py-1.5 rounded-full font-medium">24/7 Alerts</span>
-                                    </div>
-                                    <div class="grid grid-cols-3 gap-3">
-                                        <div class="sol-stat"><div class="val">100+</div><div class="lbl">Hospitals</div></div>
-                                        <div class="sol-stat"><div class="val">ISO</div><div class="lbl">14644 Ready</div></div>
-                                        <div class="sol-stat"><div class="val">&lt;1s</div><div class="lbl">Alert Time</div></div>
-                                    </div>
-                                </div>
-                                <div class="w-full md:w-48 flex-shrink-0 bg-gradient-to-br from-rose-50 to-white rounded-2xl p-6 flex flex-col items-center justify-center text-center">
-                                    <div class="text-6xl mb-3">🏥</div>
-                                    <div class="text-sm font-semibold text-rose-700">Sterile Air</div>
-                                    <div class="text-xs text-gray-500 mt-1">ISO compliant</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+            <div class="text-center mb-16">
+                <span class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-3xl text-sm font-semibold fm-hidden-up" data-delay="0">SOLUTIONS</span>
+                <h2 class="text-4xl md:text-5xl font-bold mt-4 fm-hidden-up" data-delay="100">Built for every environment</h2>
+                <p class="mt-4 text-gray-500 fm-hidden-up" data-delay="200">Swipe or click to explore</p>
             </div>
         </div>
+
+        <!-- Tab Nav -->
+        <div class="max-w-7xl mx-auto px-6 mb-10 fm-hidden-up" data-delay="150">
+            <div id="sol-tabs" class="flex gap-3 flex-wrap justify-center">
+                <button data-tab="0" class="sol-tab active-tab px-6 py-2.5 rounded-3xl text-sm font-semibold transition-all duration-300 bg-emerald-600 text-white">🏗️ Construction</button>
+                <button data-tab="1" class="sol-tab px-6 py-2.5 rounded-3xl text-sm font-semibold transition-all duration-300 bg-white border border-gray-200 text-gray-600 hover:border-emerald-400">🏢 Smart Buildings</button>
+                <button data-tab="2" class="sol-tab px-6 py-2.5 rounded-3xl text-sm font-semibold transition-all duration-300 bg-white border border-gray-200 text-gray-600 hover:border-emerald-400">🌆 Smart Cities</button>
+                <button data-tab="3" class="sol-tab px-6 py-2.5 rounded-3xl text-sm font-semibold transition-all duration-300 bg-white border border-gray-200 text-gray-600 hover:border-emerald-400">🏫 Education</button>
+                <button data-tab="4" class="sol-tab px-6 py-2.5 rounded-3xl text-sm font-semibold transition-all duration-300 bg-white border border-gray-200 text-gray-600 hover:border-emerald-400">🏥 Healthcare</button>
+            </div>
+        </div>
+
+        <!-- Carousel Track -->
+        <div class="relative overflow-hidden">
+            <div id="sol-track" class="flex transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]" style="will-change:transform;">
+
+                <!-- Slide 0: Construction -->
+                <div class="sol-slide flex-shrink-0 w-full px-6 md:px-16 lg:px-32">
+                    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+                        <div>
+                            <div class="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-1.5 rounded-3xl text-xs font-semibold mb-6">REGULATORY COMPLIANCE</div>
+                            <h3 class="text-3xl md:text-4xl font-bold leading-tight">Clean Construction</h3>
+                            <p class="mt-5 text-lg text-gray-600 leading-relaxed">Real-time dust and particulate monitoring to keep your sites DPCC, BMC &amp; PMC compliant. Automated alerts before limits are breached.</p>
+                            <ul class="mt-8 space-y-3 text-gray-700">
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>PM2.5 &amp; PM10 continuous monitoring</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>Automated regulatory reporting</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>Wind &amp; weather integration</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>Dashboard for site managers</li>
+                            </ul>
+                            <button class="mt-10 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-semibold transition-all hover:scale-105">Learn More →</button>
+                        </div>
+                        <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-3xl p-10 flex flex-col gap-6">
+                            <div class="text-7xl text-center">🏗️</div>
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-orange-500">500+</div><div class="text-xs text-gray-500 mt-1">Sites Monitored</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-emerald-600">98%</div><div class="text-xs text-gray-500 mt-1">Compliance Rate</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-blue-500">24/7</div><div class="text-xs text-gray-500 mt-1">Live Alerts</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-purple-500">3 min</div><div class="text-xs text-gray-500 mt-1">Avg Response</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 1: Smart Buildings -->
+                <div class="sol-slide flex-shrink-0 w-full px-6 md:px-16 lg:px-32">
+                    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+                        <div>
+                            <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-1.5 rounded-3xl text-xs font-semibold mb-6">WELL &amp; IGBC CERTIFIED</div>
+                            <h3 class="text-3xl md:text-4xl font-bold leading-tight">Smart Buildings</h3>
+                            <p class="mt-5 text-lg text-gray-600 leading-relaxed">Create healthier workplaces with intelligent indoor air quality management. Trusted by Fortune 500 offices, premium hotels, and leading schools.</p>
+                            <ul class="mt-8 space-y-3 text-gray-700">
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>CO₂, VOC &amp; formaldehyde sensors</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>HVAC auto-integration</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>Employee wellness dashboard</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>WELL &amp; IGBC certification support</li>
+                            </ul>
+                            <button class="mt-10 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-semibold transition-all hover:scale-105">Learn More →</button>
+                        </div>
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-10 flex flex-col gap-6">
+                            <div class="text-7xl text-center">🏢</div>
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-blue-500">200+</div><div class="text-xs text-gray-500 mt-1">Buildings</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-emerald-600">40%</div><div class="text-xs text-gray-500 mt-1">Productivity Boost</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-orange-500">8+</div><div class="text-xs text-gray-500 mt-1">Parameters Tracked</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-purple-500">WELL</div><div class="text-xs text-gray-500 mt-1">Certified</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2: Smart Cities -->
+                <div class="sol-slide flex-shrink-0 w-full px-6 md:px-16 lg:px-32">
+                    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+                        <div>
+                            <div class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-1.5 rounded-3xl text-xs font-semibold mb-6">IIT VALIDATED NETWORK</div>
+                            <h3 class="text-3xl md:text-4xl font-bold leading-tight">Smart Cities</h3>
+                            <p class="mt-5 text-lg text-gray-600 leading-relaxed">City-scale air quality intelligence with dense sensor networks. Partnered with IITs and state governments to drive real environmental policy.</p>
+                            <ul class="mt-8 space-y-3 text-gray-700">
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>Hyperlocal pollution mapping</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>Source attribution AI</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>Government API integration</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>Public-facing AQI display boards</li>
+                            </ul>
+                            <button class="mt-10 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-semibold transition-all hover:scale-105">Learn More →</button>
+                        </div>
+                        <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl p-10 flex flex-col gap-6">
+                            <div class="text-7xl text-center">🌆</div>
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-emerald-600">9K+</div><div class="text-xs text-gray-500 mt-1">Sensor Nodes</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-blue-500">50+</div><div class="text-xs text-gray-500 mt-1">Cities Covered</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-orange-500">IIT</div><div class="text-xs text-gray-500 mt-1">Validated</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-purple-500">Gov.</div><div class="text-xs text-gray-500 mt-1">Partnered</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3: Education -->
+                <div class="sol-slide flex-shrink-0 w-full px-6 md:px-16 lg:px-32">
+                    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+                        <div>
+                            <div class="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-1.5 rounded-3xl text-xs font-semibold mb-6">CHILD-SAFE ENVIRONMENTS</div>
+                            <h3 class="text-3xl md:text-4xl font-bold leading-tight">Education</h3>
+                            <p class="mt-5 text-lg text-gray-600 leading-relaxed">Protect students and staff with continuous classroom air monitoring. Improve focus, reduce sick days, and create healthier campuses.</p>
+                            <ul class="mt-8 space-y-3 text-gray-700">
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>Per-classroom CO₂ &amp; PM monitoring</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>Aira integration for kids</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>Parent &amp; admin reports</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>VapeSense AI for vape detection</li>
+                            </ul>
+                            <button class="mt-10 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-semibold transition-all hover:scale-105">Learn More →</button>
+                        </div>
+                        <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-10 flex flex-col gap-6">
+                            <div class="text-7xl text-center">🏫</div>
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-purple-500">300+</div><div class="text-xs text-gray-500 mt-1">Schools</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-emerald-600">28%</div><div class="text-xs text-gray-500 mt-1">Fewer Sick Days</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-orange-500">AI</div><div class="text-xs text-gray-500 mt-1">Vape Detection</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-blue-500">Live</div><div class="text-xs text-gray-500 mt-1">Classroom AQI</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 4: Healthcare -->
+                <div class="sol-slide flex-shrink-0 w-full px-6 md:px-16 lg:px-32">
+                    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+                        <div>
+                            <div class="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-1.5 rounded-3xl text-xs font-semibold mb-6">CLINICAL GRADE ACCURACY</div>
+                            <h3 class="text-3xl md:text-4xl font-bold leading-tight">Healthcare</h3>
+                            <p class="mt-5 text-lg text-gray-600 leading-relaxed">Hospital-grade air quality monitoring for ICUs, OTs, and wards. Ensures sterile environments and protects patients with compromised immunity.</p>
+                            <ul class="mt-8 space-y-3 text-gray-700">
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>NABH &amp; JCI compliance support</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>ICU &amp; OT pressure differential alerts</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>Pathogen &amp; mold risk index</li>
+                                <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold flex-shrink-0">✓</span>Integration with BMS systems</li>
+                            </ul>
+                            <button class="mt-10 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-semibold transition-all hover:scale-105">Learn More →</button>
+                        </div>
+                        <div class="bg-gradient-to-br from-red-50 to-rose-50 rounded-3xl p-10 flex flex-col gap-6">
+                            <div class="text-7xl text-center">🏥</div>
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-red-500">100+</div><div class="text-xs text-gray-500 mt-1">Hospitals</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-emerald-600">NABH</div><div class="text-xs text-gray-500 mt-1">Compliant</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-orange-500">OT</div><div class="text-xs text-gray-500 mt-1">Grade Sensors</div></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-2xl font-bold text-blue-500">99.9%</div><div class="text-xs text-gray-500 mt-1">Uptime</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- end track -->
+        </div>
+
+        <!-- Prev / Next arrows -->
+        <div class="max-w-6xl mx-auto px-6 mt-10 flex items-center justify-between">
+            <button id="sol-prev" class="w-12 h-12 rounded-full bg-white border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 flex items-center justify-center text-xl transition-all disabled:opacity-30" aria-label="Previous">&#8592;</button>
+            <!-- Dots -->
+            <div id="sol-dots" class="flex gap-2">
+                <button class="sol-dot w-3 h-3 rounded-full bg-emerald-600 transition-all" data-dot="0"></button>
+                <button class="sol-dot w-3 h-3 rounded-full bg-gray-300 transition-all" data-dot="1"></button>
+                <button class="sol-dot w-3 h-3 rounded-full bg-gray-300 transition-all" data-dot="2"></button>
+                <button class="sol-dot w-3 h-3 rounded-full bg-gray-300 transition-all" data-dot="3"></button>
+                <button class="sol-dot w-3 h-3 rounded-full bg-gray-300 transition-all" data-dot="4"></button>
+            </div>
+            <button id="sol-next" class="w-12 h-12 rounded-full bg-white border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 flex items-center justify-center text-xl transition-all" aria-label="Next">&#8594;</button>
+        </div>
+
+        <script>
+        (function() {
+            var track = document.getElementById('sol-track');
+            var tabs = document.querySelectorAll('.sol-tab');
+            var dots = document.querySelectorAll('.sol-dot');
+            var prev = document.getElementById('sol-prev');
+            var next = document.getElementById('sol-next');
+            var total = 5;
+            var cur = 0;
+
+            function goTo(n) {
+                cur = (n + total) % total;
+                track.style.transform = 'translateX(-' + (cur * 100) + '%)';
+                tabs.forEach(function(t, i) {
+                    if (i === cur) {
+                        t.classList.add('bg-emerald-600', 'text-white');
+                        t.classList.remove('bg-white', 'border', 'border-gray-200', 'text-gray-600');
+                    } else {
+                        t.classList.remove('bg-emerald-600', 'text-white');
+                        t.classList.add('bg-white', 'border', 'border-gray-200', 'text-gray-600');
+                    }
+                });
+                dots.forEach(function(d, i) {
+                    d.classList.toggle('bg-emerald-600', i === cur);
+                    d.classList.toggle('w-6', i === cur);
+                    d.classList.toggle('bg-gray-300', i !== cur);
+                    d.classList.toggle('w-3', i !== cur);
+                });
+                prev.disabled = cur === 0;
+            }
+
+            tabs.forEach(function(t) { t.addEventListener('click', function() { goTo(parseInt(t.dataset.tab)); }); });
+            dots.forEach(function(d) { d.addEventListener('click', function() { goTo(parseInt(d.dataset.dot)); }); });
+            prev.addEventListener('click', function() { goTo(cur - 1); });
+            next.addEventListener('click', function() { goTo(cur + 1); });
+
+            // Touch / swipe
+            var startX = 0;
+            track.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, {passive: true});
+            track.addEventListener('touchend', function(e) {
+                var diff = startX - e.changedTouches[0].clientX;
+                if (Math.abs(diff) > 50) goTo(diff > 0 ? cur + 1 : cur - 1);
+            }, {passive: true});
+
+            // Auto-advance every 5s
+            var timer = setInterval(function() { goTo(cur + 1); }, 5000);
+            track.addEventListener('touchstart', function() { clearInterval(timer); }, {passive: true});
+            document.getElementById('sol-tabs').addEventListener('click', function() { clearInterval(timer); });
+
+            goTo(0);
+        })();
+        </script>
     </section>
 
     <!-- CTA -->
-    <section id="cta-section" class="py-28 bg-gradient-to-br from-emerald-700 to-emerald-900 text-white relative overflow-hidden" data-animate="section">
-        <div class="cta-glow"></div>
-        <div class="max-w-4xl mx-auto text-center px-6 relative">
+    <section class="py-28 bg-gradient-to-br from-emerald-700 to-emerald-900 text-white" data-animate="section">
+        <div class="max-w-4xl mx-auto text-center px-6">
             <h2 class="text-4xl md:text-5xl font-bold fm-hidden-scale" data-delay="0">Ready to improve air quality?</h2>
-            <p class="mt-6 text-xl opacity-90">Join hundreds of organizations already using Airveda to protect health and comply with regulations.</p>
-            <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
+            <p class="mt-6 text-xl opacity-90 fm-hidden-up" data-delay="150">Join hundreds of organizations already using Airveda to protect health and comply with regulations.</p>
+            <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center fm-hidden-up" data-delay="300">
                 <button onclick="alert('Demo inquiry form would open here')" 
-                        class="btn-primary px-10 py-5 bg-white text-emerald-700 font-semibold rounded-3xl text-lg">Talk to Sales</button>
+                        class="px-10 py-5 bg-white text-emerald-700 font-semibold rounded-3xl text-lg">Talk to Sales</button>
                 <button onclick="window.open('https://apps.apple.com/us/app/airveda/id1101687462','_blank')" 
-                        class="px-10 py-5 border border-white/50 hover:bg-white/10 font-semibold rounded-3xl text-lg transition-all hover:scale-105">Download Free App</button>
+                        class="px-10 py-5 border border-white/50 hover:bg-white/10 font-semibold rounded-3xl text-lg">Download Free App</button>
             </div>
         </div>
     </section>
 
-    <footer class="bg-gray-900 text-gray-400 py-16" id="main-footer">
+    <footer class="bg-gray-900 text-gray-400 py-16" data-animate="section">
         <div class="max-w-7xl mx-auto px-6 text-center">
             <div class="flex justify-center items-center gap-2 mb-6 fm-hidden-up" data-delay="0">
                 <img src="images-removebg-preview.png" alt="Airveda Logo" class="h-10 w-auto brightness-0 invert">
@@ -793,205 +945,256 @@
     </footer>
 
     <script>
-        function showAllHidden() {
-            document.querySelectorAll('.fm-hidden,.fm-hidden-up,.fm-hidden-right,.fm-hidden-scale,.fm-hidden-left').forEach(el => {
-                el.style.opacity = '1';
-                el.style.transform = 'none';
-            });
-            ['aira-text','aira-phones','main-footer'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
-            });
-        }
-        if (typeof Motion === 'undefined') { showAllHidden(); }
-
-        let animate, inView;
-        try { ({ animate, inView } = Motion); } catch(e) { showAllHidden(); }
-
+        // Motion IIFE — v11 uses window.Motion; check all known namespaces
+        const _Motion = window.Motion || window.MotionDom || window.motion || {};
+        const animate = _Motion.animate || null;
+        const inView  = _Motion.inView  || null;
         const spring = [0.22, 1, 0.36, 1];
+
         function animEl(el, props, opts) {
-            if (!el) return;
-            try { animate(el, props, { easing: spring, ...opts }); } catch(e) { showAllHidden(); }
+            if (!animate) return;
+            const target = typeof el === 'string' ? document.querySelector(el) : el;
+            if (target) animate(target, props, { easing: spring, ...opts });
         }
 
-        try {
-            // ── Cursor glow ──
-            const glow = document.getElementById('cursor-glow');
-            document.addEventListener('mousemove', e => {
-                glow.style.left = e.clientX + 'px';
-                glow.style.top  = e.clientY + 'px';
-            });
+        function safeInView(el, cb, opts) {
+            if (!inView) return;
+            if (el) inView(el, cb, opts);
+        }
 
-            // ── Scroll progress bar ──
-            const scrollBar = document.getElementById('scroll-bar');
-            window.addEventListener('scroll', () => {
-                const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
-                scrollBar.style.width = pct + '%';
-                document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 40);
-            }, { passive: true });
+        // --- Nav slide down ---
+        animEl('#main-nav', { opacity: [0, 1], transform: ['translateY(-20px)', 'translateY(0px)'] }, { duration: 0.5 });
 
-            // ── Ripple on .btn-primary ──
-            document.querySelectorAll('.btn-primary').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    const r = document.createElement('span');
-                    r.className = 'ripple';
-                    const size = Math.max(btn.offsetWidth, btn.offsetHeight);
-                    const rect = btn.getBoundingClientRect();
-                    r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
-                    btn.appendChild(r);
-                    setTimeout(() => r.remove(), 600);
+        // --- Hero sequence (staggered) ---
+        [
+            ['#hero-badge',  0.2],
+            ['#hero-title',  0.35],
+            ['#hero-desc',   0.5],
+            ['#hero-btns',   0.65],
+            ['#hero-stats',  0.8],
+        ].forEach(([sel, delay]) =>
+            animEl(sel, { opacity: [0,1], transform: ['translateY(40px)','translateY(0px)'] }, { duration: 0.65, delay })
+        );
+        animEl('#hero-visual', { opacity: [0,1], transform: ['translateX(60px)','translateX(0px)'] }, { duration: 0.8, delay: 0.4 });
+
+        // --- Scroll-triggered animations ---
+        document.querySelectorAll('[data-animate="section"]').forEach(section => {
+            safeInView(section, () => {
+                section.querySelectorAll('.fm-hidden-up').forEach(el => {
+                    const delay = parseFloat(el.dataset.delay || 0) / 1000;
+                    animEl(el, { opacity: [0,1], transform: ['translateY(40px)','translateY(0px)'] }, { duration: 0.65, delay });
                 });
-            });
+                section.querySelectorAll('.fm-hidden-scale').forEach(el => {
+                    const delay = parseFloat(el.dataset.delay || 0) / 1000;
+                    animEl(el, { opacity: [0,1], transform: ['scale(0.85)','scale(1)'] }, { duration: 0.7, delay });
+                });
+                section.querySelectorAll('.fm-hidden-right').forEach(el => {
+                    const delay = parseFloat(el.dataset.delay || 0) / 1000;
+                    animEl(el, { opacity: [0,1], transform: ['translateX(60px)','translateX(0px)'] }, { duration: 0.75, delay });
+                });
+            }, { amount: 0.15 });
+        });
 
-            // ── Nav entrance ──
-            animEl(document.getElementById('main-nav'), { opacity:[0,1], transform:['translateY(-20px)','translateY(0px)'] }, { duration:0.5 });
+        // --- Floating hero card ---
+        const heroCard = document.querySelector('#hero-visual .relative.bg-white');
+        if (heroCard && animate) animate(heroCard,
+            { transform: ['translateY(0px)', 'translateY(-12px)', 'translateY(0px)'] },
+            { duration: 4, repeat: Infinity, easing: 'ease-in-out' }
+        );
 
-            // ── Hero staggered entrance ──
-            ['#hero-badge','#hero-title','#hero-desc','#hero-btns','#hero-stats'].forEach((sel, i) => {
-                animEl(document.querySelector(sel), { opacity:[0,1], transform:['translateY(40px)','translateY(0px)'] }, { duration:0.65, delay: 0.15 + i*0.15 });
-            });
-            animEl(document.getElementById('hero-visual'), { opacity:[0,1], transform:['translateX(50px)','translateX(0px)'] }, { duration:0.8, delay:0.35 });
-
-            // ── Scroll reveals for fm-hidden-* elements ──
-            document.querySelectorAll('[data-animate="section"]').forEach(section => {
-                inView(section, () => {
-                    section.querySelectorAll('.fm-hidden-up').forEach(el => {
-                        animEl(el, { opacity:[0,1], transform:['translateY(40px)','translateY(0px)'] }, { duration:0.6, delay: parseFloat(el.dataset.delay||0)/1000 });
-                    });
-                    section.querySelectorAll('.fm-hidden-scale').forEach(el => {
-                        animEl(el, { opacity:[0,1], transform:['scale(0.88)','scale(1)'] }, { duration:0.65, delay: parseFloat(el.dataset.delay||0)/1000 });
-                    });
-                    section.querySelectorAll('.fm-hidden-right').forEach(el => {
-                        animEl(el, { opacity:[0,1], transform:['translateX(50px)','translateX(0px)'] }, { duration:0.7, delay: parseFloat(el.dataset.delay||0)/1000 });
-                    });
-                    section.querySelectorAll('.fm-hidden-left').forEach(el => {
-                        animEl(el, { opacity:[0,1], transform:['translateX(-50px)','translateX(0px)'] }, { duration:0.7, delay: parseFloat(el.dataset.delay||0)/1000 });
-                    });
-                    section.querySelectorAll('.aqi-bar').forEach(bar => {
-                        setTimeout(() => { bar.style.width = bar.dataset.w; }, 350);
-                    });
-                }, { amount: 0.15 });
-            });
-
-            // ── 3D tilt removed ──
-
-            // ── Live AQI pulse ──
-            setInterval(() => {
-                document.querySelectorAll('.text-6xl.font-bold').forEach(el => {
-                    if (Math.random() > 0.65) {
-                        const num = parseInt(el.textContent);
-                        if (num) {
-                            const next = Math.max(20, num + Math.floor(Math.random()*3) - 1);
-                            animate(el, { transform:['scale(1)','scale(1.15)','scale(1)'] }, { duration:0.4, easing:'ease-in-out' });
-                            setTimeout(() => el.textContent = next, 200);
-                        }
+        // --- Live AQI pulse ---
+        setInterval(() => {
+            document.querySelectorAll('.text-6xl.font-bold').forEach(el => {
+                if (Math.random() > 0.7) {
+                    let num = parseInt(el.textContent);
+                    if (num) {
+                        const next = Math.max(20, num + Math.floor(Math.random() * 3) - 1);
+                        animate && animate(el, { transform: ['scale(1)', 'scale(1.15)', 'scale(1)'] }, { duration: 0.4, easing: 'ease-in-out' });
+                        setTimeout(() => el.textContent = next, 200);
                     }
-                });
-            }, 3500);
-
-            // ── Counter roll on hero stats ──
-            const statsEl = document.getElementById('hero-stats');
-            if (statsEl) {
-                inView(statsEl, () => {
-                    statsEl.querySelectorAll('.text-3xl, .text-4xl').forEach(el => {
-                        const raw = el.textContent.trim();
-                        const num = parseInt(raw);
-                        if (!num) return;
-                        const suffix = raw.replace(String(num), '');
-                        let cur = 0, step = Math.ceil(num/40);
-                        const t = setInterval(() => { cur = Math.min(cur+step, num); el.textContent = cur+suffix; if(cur>=num) clearInterval(t); }, 30);
-                    });
-                }, { amount: 0.5 });
-            }
-
-            // ── Aira section ──
-            const airaText   = document.getElementById('aira-text');
-            const airaPhones = document.getElementById('aira-phones');
-            if (airaText) {
-                airaText.style.opacity = '0';
-                airaPhones.style.opacity = '0';
-                inView(airaText, () => {
-                    animEl(airaText,   { opacity:[0,1], transform:['translateX(-40px)','translateX(0)'] }, { duration:0.7, delay:0.1 });
-                    animEl(airaPhones, { opacity:[0,1], transform:['translateY(40px)','translateY(0)'] },  { duration:0.75, delay:0.25 });
-                }, { amount: 0.2 });
-            }
-
-            // ── AQI cards staggered pop-in ──
-            const aqiGrid = document.querySelector('.grid.grid-cols-2');
-            if (aqiGrid) {
-                aqiGrid.querySelectorAll('.aqi-card').forEach(c => c.style.opacity = '0');
-                inView(aqiGrid, () => {
-                    aqiGrid.querySelectorAll('.aqi-card').forEach((card, i) => {
-                        animEl(card, { opacity:[0,1], transform:['scale(0.9) translateY(20px)','scale(1) translateY(0)'] }, { duration:0.5, delay: i*0.08 });
-                    });
-                    aqiGrid.querySelectorAll('.aqi-bar').forEach(bar => {
-                        setTimeout(() => { bar.style.width = bar.dataset.w; }, 400);
-                    });
-                }, { amount: 0.2 });
-            }
-
-            // ── Product cards stagger ──
-            const prodSection = document.getElementById('products');
-            if (prodSection) {
-                prodSection.querySelectorAll('.card-hover').forEach(c => c.style.opacity = '0');
-                inView(prodSection, () => {
-                    prodSection.querySelectorAll('.card-hover').forEach((card, i) => {
-                        animEl(card, { opacity:[0,1], transform:['translateY(40px)','translateY(0)'] }, { duration:0.6, delay: 0.1+i*0.12 });
-                    });
-                }, { amount: 0.15 });
-            }
-
-            // ── Solutions heading animation ──
-            const solHeading = document.getElementById('sol-heading');
-            if (solHeading) {
-                solHeading.style.opacity = '0';
-                inView(solHeading, () => {
-                    animEl(solHeading, { opacity:[0,1], transform:['translateY(30px)','translateY(0)'] }, { duration:0.6, delay:0.05 });
-                }, { amount: 0.3 });
-            }
-
-            // ── Solutions tabs ──
-            const tabs   = document.querySelectorAll('.sol-tab');
-            const panels = document.querySelectorAll('.sol-panel');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const idx = tab.dataset.tab;
-                    tabs.forEach(t => t.classList.remove('active'));
-                    panels.forEach(p => p.classList.remove('active'));
-                    tab.classList.add('active');
-                    document.querySelector(`.sol-panel[data-panel="${idx}"]`).classList.add('active');
-                });
+                }
             });
+        }, 4000);
 
-            // animate solutions section in on scroll
-            const solSection = document.getElementById('solutions-section');
-            if (solSection) {
-                solSection.style.opacity = '0';
-                inView(solSection, () => {
-                    animEl(solSection, { opacity:[0,1], transform:['translateY(30px)','translateY(0)'] }, { duration:0.65, delay:0.05 });
-                }, { amount: 0.1 });
+        // =============================================
+        // ===== ENHANCED ANIMATIONS (NEW) =====
+        // =============================================
+
+        // --- SCROLL PROGRESS BAR ---
+        const progressBar = document.getElementById('scroll-progress');
+        if (progressBar) {
+            window.addEventListener('scroll', () => {
+                const scrolled = window.scrollY;
+                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                if (maxScroll > 0) progressBar.style.width = (scrolled / maxScroll * 100) + '%';
+            });
+        }
+
+        // --- HERO PARTICLES ---
+        const particleContainer = document.getElementById('particles-hero');
+        if (particleContainer) {
+            const colors = ['#10b981','#34d399','#6ee7b7','#a7f3d0'];
+            for (let i = 0; i < 18; i++) {
+                const p = document.createElement('div');
+                p.className = 'hero-particle';
+                const size = 4 + Math.random() * 14;
+                p.style.cssText = `
+                    width:${size}px; height:${size}px;
+                    left:${Math.random()*100}%;
+                    bottom:-20px;
+                    background:${colors[Math.floor(Math.random()*colors.length)]};
+                    opacity:0.18;
+                    animation-duration:${6+Math.random()*10}s;
+                    animation-delay:${Math.random()*8}s;
+                `;
+                particleContainer.appendChild(p);
             }
+        }
 
-            // ── CTA ──
-            const ctaSection = document.getElementById('cta-section');
-            if (ctaSection) {
-                inView(ctaSection, () => {
-                    animEl(ctaSection.querySelector('h2'), { opacity:[0,1], transform:['scale(0.9)','scale(1)'] }, { duration:0.6, delay:0.05 });
-                    animEl(ctaSection.querySelector('p'),  { opacity:[0,1], transform:['translateY(20px)','translateY(0)'] }, { duration:0.55, delay:0.2 });
-                    animEl(ctaSection.querySelector('.mt-12'), { opacity:[0,1], transform:['translateY(20px)','translateY(0)'] }, { duration:0.55, delay:0.32 });
-                }, { amount: 0.3 });
+        // --- TILT CARDS ---
+        document.querySelectorAll('.card-hover').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                card.style.transform = `translateY(-12px) scale(1.02) rotateY(${x*8}deg) rotateX(${-y*8}deg)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+
+        // --- RIPPLE EFFECT ON BUTTONS ---
+        document.querySelectorAll('.ripple-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                const r = document.createElement('span');
+                r.className = 'ripple';
+                const rect = btn.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px;`;
+                btn.appendChild(r);
+                setTimeout(() => r.remove(), 700);
+            });
+        });
+
+        // --- AQI BARS GROW ON SCROLL ---
+        const aqiSection = document.querySelector('.grid.grid-cols-2.md\\:grid-cols-5');
+        safeInView(aqiSection, () => {
+            document.querySelectorAll('.aqi-bar').forEach((bar, i) => {
+                setTimeout(() => bar.classList.add('grown'), i * 150);
+            });
+        }, { amount: 0.3 });
+
+        // --- COUNTER ANIMATION FOR HERO STATS ---
+        function animateCounter(el, target, suffix = '') {
+            let current = 0;
+            const step = target / 40;
+            const interval = setInterval(() => {
+                current = Math.min(current + step, target);
+                el.textContent = Math.floor(current) + suffix;
+                if (current >= target) clearInterval(interval);
+            }, 30);
+        }
+        const heroStats = document.getElementById('hero-stats');
+        safeInView(heroStats, () => {
+            const counters = heroStats.querySelectorAll('.text-3xl.md\\:text-4xl');
+            if (counters[0]) animateCounter(counters[0], 9000, 'K+');
+            if (counters[1]) animateCounter(counters[1], 9, '+');
+        }, { amount: 0.5 });
+
+        // --- AIRA POPUP SYSTEM ---
+        const airaChar = document.getElementById('aira-char');
+        const airaBubble = document.getElementById('aira-bubble');
+        const airaClose = document.getElementById('aira-close');
+        const airaMsg = document.getElementById('aira-msg');
+        let airaOpen = false;
+        let bubbleDismissed = false;
+        let airaShown = false;
+
+        const airaMessages = [
+            "Hii! &#127800; I'm Aira! Let's check your air quality together!",
+            "Did you know? Indoor air can be 5x more polluted than outside! &#128563;",
+            "Delhi's AQI is Unhealthy today. Maybe wear a mask? &#128567;",
+            "Good news — Bengaluru's air is Good today! &#127881;",
+            "I feel my best when the AQI is below 50. Do you? &#127808;"
+        ];
+        let msgIndex = 0;
+
+        // Pop Aira up after 2 seconds
+        setTimeout(() => {
+            airaChar.classList.add('visible');
+            airaShown = true;
+            setTimeout(() => {
+                airaChar.classList.add('idle');
+                // Show bubble after character fully enters
+                setTimeout(() => {
+                    if (!bubbleDismissed) {
+                        airaBubble.classList.add('visible');
+                        airaOpen = true;
+                        // Auto-dismiss bubble after 6s
+                        setTimeout(() => {
+                            if (airaOpen) {
+                                airaBubble.classList.remove('visible');
+                                airaOpen = false;
+                            }
+                        }, 6000);
+                    }
+                }, 500);
+            }, 1000);
+        }, 2000);
+
+        // Close bubble on X click
+        airaClose.addEventListener('click', e => {
+            e.stopPropagation();
+            airaBubble.classList.remove('visible');
+            airaOpen = false;
+            bubbleDismissed = true;
+        });
+
+        // Toggle bubble on character click
+        airaChar.addEventListener('click', () => {
+            if (airaOpen) {
+                airaBubble.classList.remove('visible');
+                airaOpen = false;
+            } else {
+                msgIndex = (msgIndex + 1) % airaMessages.length;
+                airaMsg.innerHTML = airaMessages[msgIndex];
+                airaBubble.classList.add('visible');
+                airaOpen = true;
+                bubbleDismissed = false;
             }
+        });
 
-            // ── Footer ──
-            const footer = document.getElementById('main-footer');
-            if (footer) {
-                footer.style.opacity = '0';
-                inView(footer, () => {
-                    animEl(footer, { opacity:[0,1], transform:['translateY(24px)','translateY(0)'] }, { duration:0.65, delay:0.05 });
-                }, { amount: 0.2 });
+        // Aira waves when scrolled to AQI section
+        window.addEventListener('scroll', () => {
+            if (!airaShown) return;
+            const y = window.scrollY;
+            const docH = document.body.scrollHeight - window.innerHeight;
+            // Nudge Aira when ~40% scrolled
+            if (y > docH * 0.3 && !bubbleDismissed && !airaOpen) {
+                airaMsg.innerHTML = "Hey! &#128075; The cities section shows live AQI data!";
+                airaBubble.classList.add('visible');
+                airaOpen = true;
+                setTimeout(() => {
+                    if (airaOpen) {
+                        airaBubble.classList.remove('visible');
+                        airaOpen = false;
+                    }
+                }, 4000);
+                bubbleDismissed = true; // only once
             }
+        }, { passive: true });
+    </script>
 
-        } catch(e) { showAllHidden(); }
+    <script>
+        // Fallback for missing local images
+        document.querySelectorAll('img').forEach(function(img) {
+            if (!img.getAttribute('onerror')) {
+                img.addEventListener('error', function() {
+                    this.style.display = 'none';
+                });
+            }
+        });
     </script>
 </body>
 </html>
